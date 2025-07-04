@@ -42,8 +42,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-background">
-        <div className="pb-16">
+      <body className="bg-background max-w-md mx-auto ">
+        <div className="">
           <Providers>{children}</Providers>
         </div>
       </body>

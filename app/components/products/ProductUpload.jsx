@@ -11,8 +11,8 @@ const ProductUpload = () => {
     <div className="w-full max-w-md mx-auto px-4 py-3 bg-white">
       {/* Header */}
       <div className="flex items-center justify-between mb-6 mt-2">
-        <button className="text-3xl font-light text-gray-700">&times;</button>
-        <h1 className="text-xl font-extrabold text-center flex-1 -ml-8 text-black">New Product</h1>
+        {/* <button className="text-3xl font-light text-gray-700">&times;</button> */}
+        <h1 className="text-xl font-extrabold text-center justify-center mx-auto flex-1 -ml-8 text-black">New Product</h1>
         <span className="w-8" /> 
       </div>
 
