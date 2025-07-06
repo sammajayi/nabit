@@ -2,8 +2,22 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { Trash2, Plus, Minus } from "lucide-react";
 
-export default function CartPage({ cartItems = [], onUpdateCart }) {
-  const [cart, setCart] = useState(cartItems || []);
+type Product = {
+  name: string;
+  images: string[];
+  price: number | string;
+  description: string;
+  category: string;
+  owner: string;
+};
+
+type CartPageProps = {
+  cartItems: Product[];
+  onUpdateCart: (cart: Product[]) => void;
+};
+
+export default function CartPage({ cartItems = [], onUpdateCart }: CartPageProps) {
+  const [cart, setCart] = useState<Product[]>(cartItems || []);
 
   // Group items by name and count quantities
   const groupedItems = cart.reduce((acc, item) => {
@@ -14,9 +28,9 @@ export default function CartPage({ cartItems = [], onUpdateCart }) {
       acc[key] = { ...item, quantity: 1 };
     }
     return acc;
-  }, {});
+  }, {} as Record<string, Product & { quantity: number }>);
 
-  const updateQuantity = (itemName, newQuantity) => {
+  const updateQuantity = (itemName: string, newQuantity: number) => {
     if (newQuantity <= 0) {
       // Remove item completely
       const newCart = cart.filter(item => item.name !== itemName);
@@ -33,7 +47,7 @@ export default function CartPage({ cartItems = [], onUpdateCart }) {
     }
   };
 
-  const removeItem = (itemName) => {
+  const removeItem = (itemName: string) => {
     const newCart = cart.filter(item => item.name !== itemName);
     setCart(newCart);
     onUpdateCart?.(newCart);
@@ -79,6 +93,7 @@ export default function CartPage({ cartItems = [], onUpdateCart }) {
                   <button
                     onClick={() => removeItem(item.name)}
                     className="text-red-500 hover:text-red-700 p-1"
+                    aria-label={`Remove ${item.name} from cart`}
                   >
                     <Trash2 size={20} />
                   </button>
@@ -89,6 +104,7 @@ export default function CartPage({ cartItems = [], onUpdateCart }) {
                     <button
                       onClick={() => updateQuantity(item.name, item.quantity - 1)}
                       className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center hover:bg-gray-200 text-gray-300"
+                      aria-label={`Decrease quantity of ${item.name}`}
                     >
                       <Minus size={16} />
                     </button>
@@ -96,6 +112,7 @@ export default function CartPage({ cartItems = [], onUpdateCart }) {
                     <button
                       onClick={() => updateQuantity(item.name, item.quantity + 1)}
                       className="w-8 h-8 rounded-full bg-blue-100 flex items-center justify-center hover:bg-blue-200 text-blue-600"
+                      aria-label={`Increase quantity of ${item.name}`}
                     >
                       <Plus size={16} />
                     </button>
