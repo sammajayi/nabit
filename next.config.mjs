@@ -9,6 +9,15 @@ const nextConfig = {
   images: {
     domains: ['images.unsplash.com'],
   },
+  async redirects() {
+    return [
+      {
+        source: '/.well-known/farcaster.json',
+        destination: 'https://api.farcaster.xyz/miniapps/hosted-manifest/0197e10f-3285-efeb-4f24-2bf73f1d6adf',
+        permanent: false,
+      },
+    ]
+  },
 };
 
 export default nextConfig;
