@@ -13,7 +13,7 @@ export default function AuthPage() {
 
   useEffect(() => {
     if (isConnected) {
-      router.replace("/homepage");
+      router.replace("/");
     }
   }, [isConnected, router]);
 
