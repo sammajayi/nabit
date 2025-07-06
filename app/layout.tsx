@@ -11,7 +11,7 @@ export const viewport: Viewport = {
 
 export const metadata: Metadata = {
   title: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME || "Nab-It",
-  description: "Nab it Now, No Waiting",
+  description: "Nab it, No Waiting",
   other: {
     "fc:frame": JSON.stringify({
       version: "next",

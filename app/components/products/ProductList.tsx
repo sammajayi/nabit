@@ -5,6 +5,7 @@ import { ProductCard } from "./ProductCard";
 // import ProductDetails from "./ProductDetails";
 import { useRouter } from "next/navigation";
 import { mockProducts } from "../../components/products/mockProducts";
+import Navbar from "../Navbar";
 
 const categories = [
   { id: "Home", label: "Home" },
@@ -67,10 +68,9 @@ export default function ProductList({ onAddToCart }: ProductListProps) {
 
   return (
     <div className="w-full max-w-md mx-auto px-4 py-3 bg-[#f7f9fb] min-h-screen">
+      <Navbar />
       <div>
-        <div className="flex items-center justify-between px-4 pt-6 pb-2">
-          <h1 className="text-2xl font-bold mx-auto text-black">Nab-It</h1>
-        </div>
+      
 
         <div className="px-4 mb-2">
           <input
