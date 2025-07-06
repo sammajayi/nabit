@@ -25,8 +25,8 @@ export default function FarcasterProfile({ address }: FarcasterProfileProps) {
 
     const fetchFarcasterUser = async () => {
       try {
-        // Using Neynar API to get Farcaster user by address
-        const response = await fetch(`/api/farcaster/user?address=${address}`);
+        
+        const response = await fetch(`/api/farcaster/user?custody_address=${address}`);
         if (response.ok) {
           const data = await response.json();
           setUser(data);
