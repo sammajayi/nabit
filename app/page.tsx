@@ -1,10 +1,10 @@
 "use client"
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
 import { useAccount } from "wagmi";
 import AuthPage from "./auth/page";
-import React, { useState } from "react";
+import React from "react";
 import BottomNav from "./components/BottomNav";
 import ProductUpload from "./components/products/ProductUpload";
 import ProductList from "./components/products/ProductList";
@@ -27,12 +27,25 @@ function Homepage() {
   const router = useRouter();
   const [activePage, setActivePage] = useState("Home");
   const [cart, setCart] = useState<Product[]>([]);
+  const [fcUsername, setFcUsername] = useState<string | null>(null);
 
   useEffect(() => {
     if (!isConnected) {
       router.replace("/auth");
     }
   }, [isConnected, router]);
+
+  useEffect(() => {
+    if (!address) {
+      setFcUsername(null);
+      return;
+    }
+    // Fetch Farcaster profile by address to get the username
+    fetch(`/api/farcaster/user?address=${address}`)
+      .then(res => res.ok ? res.json() : null)
+      .then(data => setFcUsername(data?.username || null))
+      .catch(() => setFcUsername(null));
+  }, [address]);
 
   const handleAddToCart = (product: Product) => {
     setCart((prev) => [...prev, product]);
@@ -57,9 +70,9 @@ function Homepage() {
     <div className="bg-black min-h-screen overflow-x-hidden">
       <div className="relative flex flex-col min-h-screen max-w-md mx-auto bg-white overflow-hidden">
         {/* Farcaster Profile in top right corner */}
-        {address && (
+        {fcUsername && (
           <div className="absolute top-4 right-4 z-20">
-            <FarcasterProfile address={address} />
+            <FarcasterProfile username={fcUsername} />
           </div>
         )}
         

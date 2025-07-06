@@ -1,6 +1,6 @@
 import React from "react";
 
-import WalletConnect from "./components/WalletConnect"
+// import WalletConnect from "./components/WalletConnect"
 
 export default function Navbar() {
   return (
@@ -11,7 +11,7 @@ export default function Navbar() {
             Nab-It
           </h1>
         </div>
-       <WalletConnect />
+       
       </div>
     </header>
   );

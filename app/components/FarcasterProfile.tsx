@@ -10,23 +10,22 @@ type FarcasterUser = {
 };
 
 type FarcasterProfileProps = {
-  address: string;
+  username: string;
 };
 
-export default function FarcasterProfile({ address }: FarcasterProfileProps) {
+export default function FarcasterProfile({ username }: FarcasterProfileProps) {
   const [user, setUser] = useState<FarcasterUser | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!address) {
+    if (!username) {
       setLoading(false);
       return;
     }
 
     const fetchFarcasterUser = async () => {
       try {
-        
-        const response = await fetch(`/api/farcaster/user?custody_address=${address}`);
+        const response = await fetch(`/api/farcaster/user?username=${username}`);
         if (response.ok) {
           const data = await response.json();
           setUser(data);
@@ -39,7 +38,7 @@ export default function FarcasterProfile({ address }: FarcasterProfileProps) {
     };
 
     fetchFarcasterUser();
-  }, [address]);
+  }, [username]);
 
   if (loading) {
     return (
