@@ -1,30 +1,65 @@
 "use client"
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import BottomNav from "../components/BottomNav";
 import ProductUpload from "../components/products/ProductUpload";
-import ProductList from "../components/Home/ProductList";
+import ProductList from "../components/products/ProductList";
 import Profile from "../components/products/Profile"
-import Shop from "../components/products/Shop"
+import CartPage from "../components/products/CartPage"
+import FarcasterProfile from "../components/FarcasterProfile";
+import { useAccount } from "wagmi";
+import { useRouter } from "next/navigation";
 
+type Product = {
+  name: string;
+  images: string[];
+  price: number | string;
+  description: string;
+  category: string;
+  owner: string;
+};
 
 export default function Homepage() {
+  const { isConnected, address } = useAccount();
+  const router = useRouter();
   const [activePage, setActivePage] = useState("Home");
+  const [cart, setCart] = useState<Product[]>([]);
+
+  useEffect(() => {
+    if (!isConnected) {
+      router.replace("/auth");
+    }
+  }, [isConnected, router]);
+
+  const handleAddToCart = (product: Product) => {
+    setCart((prev) => [...prev, product]);
+  };
+
+  const handleUpdateCart = (newCart: Product[]) => {
+    setCart(newCart);
+  };
 
   let content;
   if (activePage === "Create") {
     content = <ProductUpload />;
   } else if (activePage === "Profile") {
-    content = <Profile address="0x1234...abcd" soldCount={5} boughtCount={3} />;
-  } else if((activePage === "Shop")) {
-    content = <Shop/>;
-  } else  {
-    content = <ProductList />;
+    content = <Profile />;
+  } else if (activePage === "Shop") {
+    content = <CartPage cartItems={cart} onUpdateCart={handleUpdateCart} />;
+  } else {
+    content = <ProductList onAddToCart={handleAddToCart} />;
   }
 
   return (
     <div className="bg-black min-h-screen overflow-x-hidden">
       <div className="relative flex flex-col min-h-screen max-w-md mx-auto bg-white overflow-hidden">
+        {/* Farcaster Profile in top right corner */}
+        {address && (
+          <div className="absolute top-4 right-4 z-20">
+            <FarcasterProfile address={address} />
+          </div>
+        )}
+        
         <div className="flex-1 overflow-y-auto pb-16">
           {content}
         </div>

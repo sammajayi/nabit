@@ -30,4 +30,4 @@ export default function BottomNav({ onNavigate, active }) {
       </div>
     </nav>
   );
-}
+} 

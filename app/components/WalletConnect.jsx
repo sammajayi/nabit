@@ -19,7 +19,7 @@ const WalletConnect = () => {
   return (
     <div className="flex items-center space-x-2">
       <Wallet className="z-10">
-        <ConnectWallet>
+        <ConnectWallet text="Sign In">
           <Name className="text-inherit" />
         </ConnectWallet>
         <WalletDropdown>

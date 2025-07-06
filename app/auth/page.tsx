@@ -3,19 +3,19 @@
 import { useEffect } from "react";
 import WalletConnect from "../components/WalletConnect"
 import { useRouter } from "next/navigation";
-import { useMiniKit } from "@coinbase/onchainkit/minikit";
+import { useAccount } from "wagmi";
 
 
 
 export default function AuthPage() {
-  const { context } = useMiniKit();
+  const { isConnected } = useAccount();
   const router = useRouter();
 
   useEffect(() => {
-    if (context?.client) {
-      router.replace("/Homepage");
+    if (isConnected) {
+      router.replace("/homepage");
     }
-  }, [context?.client, router]);
+  }, [isConnected, router]);
 
 
   return (

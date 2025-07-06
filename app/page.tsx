@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useMiniKit } from "@coinbase/onchainkit/minikit";
 import AuthPage from "./auth/page";
 
+
 export default function App() {
     const { setFrameReady, isFrameReady } = useMiniKit();
 
@@ -13,5 +14,13 @@ export default function App() {
         }
       }, [isFrameReady, setFrameReady]);
 
-    return <AuthPage />;
+    return (
+        <div>
+             <AuthPage />;
+           
+
+        </div>
+    )
+    
+   
 }
