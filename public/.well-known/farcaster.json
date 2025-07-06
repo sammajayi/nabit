@@ -1,0 +1,39 @@
+{
+  "miniapp": {
+    "version": "1",
+    "name": "Nab-It",
+    "iconUrl": "https://nabit.vercel.app/icon.png",
+    "homeUrl": "https://nabit.vercel.app",
+    "imageUrl": "https://nabit.vercel.app/og-image.png",
+    "buttonTitle": "🛍️ Shop Now",
+    "splashImageUrl": "https://nabit.vercel.app/logo.png",
+    "splashBackgroundColor": "#ffffff",
+    "requiredChains": [
+      "eip155:1"
+    ],
+    "requiredCapabilities": [
+      "actions.signIn",
+      "wallet.getEthereumProvider"
+    ],
+    "subtitle": "Nab It, No Waiting",
+    "description": "Buy and sell Onchain. Connect your wallet to start shopping",
+    "screenshotUrls": [
+      "https://nabit.vercel.app/screenshot1.png",
+      "https://nabit.vercel.app/screenshot2.png",
+      "https://nabit.vercel.app/screenshot3.png"
+    ],
+    "primaryCategory": "commerce",
+    "tags": [
+      "e-commerce",
+      "marketplace",
+      "shopping",
+      "decentralised",
+      "products"
+    ],
+    "heroImageUrl": "https://nabit.vercel.app/og-image.png",
+    "tagline": "Onchain Marketplace",
+    "ogTitle": "Nabit - Onchain Marketplace",
+    "ogDescription": "Buy and sell Onchain. Connect your wallet to start shopping.",
+    "ogImageUrl": "https://nabit.vercel.app/og-image.png"
+  }
+} 
