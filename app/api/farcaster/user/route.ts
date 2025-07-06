@@ -2,15 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
-  const address = searchParams.get('address');
+  const username = searchParams.get('username');
 
-  if (!address) {
-    return NextResponse.json({ error: 'Address is required' }, { status: 400 });
+  if (!username) {
+    return NextResponse.json({ error: 'username is required' }, { status: 400 });
   }
 
   try {
     const NEYNAR_API_KEY = process.env.NEYNAR_API_KEY;
-    
     if (!NEYNAR_API_KEY) {
       return NextResponse.json({ error: 'Neynar API key not configured' }, { status: 500 });
     }
@@ -19,12 +18,12 @@ export async function GET(request: NextRequest) {
       method: 'GET',
       headers: {
         'x-api-key': NEYNAR_API_KEY,
-        'Content-Type': 'application/json',
+        'accept': 'application/json',
       }
     };
 
     const response = await fetch(
-      `https://api.neynar.com/v2/farcaster/user/custody-address/${address}`,
+      `https://api.neynar.com/v2/farcaster/user/by_username/${username}`,
       options
     );
 
@@ -36,8 +35,6 @@ export async function GET(request: NextRequest) {
     }
 
     const data = await response.json();
-    
-    // Extract user data from the response
     const user = data.user;
 
     if (!user) {
@@ -58,4 +55,31 @@ export async function GET(request: NextRequest) {
       { status: 500 }
     );
   }
+}
+
+export async function POST(req: Request) {
+  const { fids } = await req.json();
+  if (!Array.isArray(fids) || fids.length === 0) {
+    return new Response("Missing or invalid fids", { status: 400 });
+  }
+
+  const res = await fetch(
+    "https://api.neynar.com/v2/farcaster/user/bulk/",
+    {
+      method: "POST",
+      headers: {
+        "accept": "application/json",
+        "content-type": "application/json",
+        "x-api-key": process.env.NEYNAR_API_KEY!,
+      },
+      body: JSON.stringify({ fids }),
+    }
+  );
+
+  if (!res.ok) {
+    return new Response("Failed to fetch from Neynar", { status: 500 });
+  }
+
+  const data = await res.json();
+  return Response.json(data);
 } 
