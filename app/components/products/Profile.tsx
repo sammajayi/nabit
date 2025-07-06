@@ -24,9 +24,7 @@ export default function Profile() {
     const [fcUser, setFcUser] = useState<FarcasterUser | null>(null);
 
     useEffect(() => {
-      if (!address) {
-        return;
-      }
+      if (!address) return;
       const fetchFarcasterUser = async () => {
         try {
           const response = await fetch(`/api/farcaster/user?custody_address=${address}`);
@@ -46,11 +44,15 @@ export default function Profile() {
 
     return (
         <div className="flex flex-col items-center p-6 rounded-2xl shadow-md bg-white mt-6">
-            {/* Farcaster profile info */}
-            {fcUser && (
+            {/* Always show Farcaster info if available, otherwise nothing extra */}
+            {fcUser ? (
               <div className="flex flex-col items-center mb-2">
                 <Image src={fcUser.pfp} alt={fcUser.displayName} width={48} height={48} className="rounded-full" />
                 <span className="text-sm font-medium text-gray-700 mt-1">@{fcUser.username}</span>
+              </div>
+            ) : (
+              <div className="flex flex-col items-center mb-2">
+                <span className="text-xs text-gray-400">No Farcaster profile found</span>
               </div>
             )}
             <Avatar address={address} className="w-16 h-16 rounded-full" />
