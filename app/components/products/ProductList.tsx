@@ -6,6 +6,8 @@ import { ProductCard } from "./ProductCard";
 import { useRouter } from "next/navigation";
 import { mockProducts } from "../../components/products/mockProducts";
 import Navbar from "../Navbar";
+// import { useAccount } from "wagmi";
+
 
 const categories = [
   { id: "Home", label: "Home" },
@@ -32,6 +34,7 @@ export default function ProductList({ onAddToCart }: ProductListProps) {
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<typeof mockProducts>([]);
   const [searchTerm, setSearchTerm] = useState("");
+  // const { address, isConnected } = useAccount();
   const router = useRouter();
 
   // useEffect(() => {

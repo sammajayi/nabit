@@ -4,6 +4,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
 
+
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -38,7 +39,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className="bg-background max-w-md mx-auto" suppressHydrationWarning>
-        <Providers>{children}</Providers>
+        <Providers>
+
+          {children}
+
+        </Providers>
       </body>
     </html>
   );

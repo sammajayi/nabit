@@ -10,7 +10,7 @@ import ProductUpload from "./components/products/ProductUpload";
 import ProductList from "./components/products/ProductList";
 import Profile from "./components/products/Profile";
 import CartPage from "./components/products/CartPage";
-import FarcasterProfile from "./components/FarcasterProfile";
+
 import { useRouter } from "next/navigation";
 
 type Product = {
@@ -72,7 +72,7 @@ function Homepage() {
         {/* Farcaster Profile in top right corner */}
         {fcUsername && (
           <div className="absolute top-4 right-4 z-20">
-            <FarcasterProfile username={fcUsername} />
+            {/* <FarcasterProfile username={fcUsername} /> */}
           </div>
         )}
         

@@ -1,76 +1,65 @@
-import React, { useEffect, useState } from 'react'
-import {
-    Name,
-    Address,
-    EthBalance,
-    Avatar,
-} from "@coinbase/onchainkit/identity";
-
-import { useAccount } from 'wagmi';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-
-type FarcasterUser = {
-  username: string;
-  displayName: string;
-  pfp: string;
-  fid: number;
-};
+import type { NeynarUser } from '@/lib/neynar';
 
 export default function Profile() {
-    const { address, isConnected } = useAccount();
-    const [fcUser, setFcUser] = useState<FarcasterUser | null>(null);
+  const fid = '875984';
+  const [user, setUser] = useState<Partial<NeynarUser> | null>(null);
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
-      if (!address) return;
-      const fetchFarcasterUser = async () => {
-        try {
-          const response = await fetch(`/api/farcaster/user?custody_address=${address}`);
-          if (response.ok) {
-            const data = await response.json();
-            setFcUser(data);
-          }
-        } catch {
-          // ignore
-        }
-      };
-      fetchFarcasterUser();
-    }, [address]);
+  // Dummy stats 
+  const stats = {
+    listings: 12,
+    sold: 8,
+    total: 2.5, // ETH or your currency
+  };
 
-    if (!isConnected) return <div className='text-black'>Please connect your wallet.</div>;
-    if (!address) return <div className='text-black'>Loading profile...</div>;
+  useEffect(() => {
+    if (!fid) return;
+    setLoading(true);
+    fetch(`/api/farcaster/user?fid=${fid}`)
+      .then(res => res.ok ? res.json() : Promise.reject("Failed to fetch user"))
+      .then(data => setUser(data))
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false));
+  }, [fid]);
 
-    return (
-        <div className="flex flex-col items-center p-6 rounded-2xl shadow-md bg-white mt-6">
-          
-            
-            {fcUser ? (
-              <div className="flex flex-col items-center mb-2">
-                <Image src={fcUser.pfp} alt={fcUser.displayName} width={48} height={48} className="rounded-full" />
-                <span className="text-sm font-medium text-gray-700 mt-1">@{fcUser.username}</span>
-              </div>
-            ) : (
-              null
-            )}
-            <Avatar address={address} className="w-16 h-16 rounded-full" />
-            <div className="font-bold text-lg mt-2">
-                <Name address={address} />
-            </div>
-            <div className="text-gray-500 text-xs mb-2">
-                <Address address={address} />
-                
-            </div>
-            <EthBalance address={address} className="text-blue-600 font-mono mb-4" />
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!user) return null;
 
-            <div className="flex gap-8 mt-4">
-                <div className="flex flex-col items-center">
-                    <span className="font-bold text-xl text-black">0</span>
-                    <span className="text-xs text-gray-500">Sold</span>
-                </div>
-                <div className="flex flex-col items-center">
-                    <span className="font-bold text-xl text-black">0</span>
-                    <span className="text-xs text-gray-500">Bought</span>
-                </div>
-            </div>
+  return (
+    <div className="flex flex-col items-center p-6 rounded-2xl shadow-md bg-white mt-6 max-w-xs mx-auto">
+      
+      <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-gray-200 shadow mb-3">
+        <Image
+          src={user.pfp_url ?? ""}
+          alt={user.display_name ?? ""}
+          width={96}
+          height={96}
+          className="object-cover w-full h-full"
+        />
+      </div>
+     
+      <div className="text-xl font-bold text-gray-900">{user.display_name}</div>
+      
+      <div className="text-gray-500 text-sm mb-4">@{user.username}</div>
+     
+      <div className="flex w-full justify-between bg-gray-50 rounded-lg p-3 mt-2">
+        <div className="flex flex-col items-center flex-1">
+          <span className="font-semibold text-gray-800">{stats.listings}</span>
+          <span className="text-xs text-gray-500">Listings</span>
         </div>
-    )
+        <div className="flex flex-col items-center flex-1 border-l border-gray-200">
+          <span className="font-semibold text-gray-800">{stats.sold}</span>
+          <span className="text-xs text-gray-500">Sold</span>
+        </div>
+        <div className="flex flex-col items-center flex-1 border-l border-gray-200">
+          <span className="font-semibold text-gray-800">{stats.total} ETH</span>
+          <span className="text-xs text-gray-500">Total Made</span>
+        </div>
+      </div>
+    </div>
+  );
 }
