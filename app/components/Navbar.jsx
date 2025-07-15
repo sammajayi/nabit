@@ -23,6 +23,8 @@ export default function Navbar() {
       .finally(() => setLoading(false));
   }, [fid]);
 
+  if (loading) return <div>Loading...</div>;
+
   return (
     <header className="flex justify-between items-center mb-3 h-11">
       <div className="flex gap-16">
