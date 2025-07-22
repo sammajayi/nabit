@@ -16,9 +16,12 @@ export async function GET() {
 
   return Response.json({
     accountAssociation: {
-      header: process.env.NEXT_PUBLIC_FARCASTER_HEADER,
-      payload: process.env.NEXT_PUBLIC_FARCASTER_PAYLOAD,
-      signature: process.env.NEXT_PUBLIC_FARCASTER_SIGNATURE,
+      // header: process.env.NEXT_PUBLIC_FARCASTER_HEADER,
+      // payload: process.env.NEXT_PUBLIC_FARCASTER_PAYLOAD,
+      // signature: process.env.NEXT_PUBLIC_FARCASTER_SIGNATURE,
+      "header": "eyJmaWQiOjg3NTk4NCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweGIzODU2ZkFhZTMxQzM2NEYxQzYyQTQyY2NiM0U4MDAyQjk1MUMwMjcifQ",
+      "payload": "eyJkb21haW4iOiJuYWJpdC52ZXJjZWwuYXBwIn0",
+      "signature": "PF7C1UIhs/Qfj4K5rtcsJNCZkTlkaq/K3oFgpJ867ccxaC/EK1BwEJRFr9T6KkcP+EjhYD8u3PC4xf0ceptxxxs="
     },
     frame: withValidProperties({
       version: "1",
@@ -33,9 +36,10 @@ export async function GET() {
       webhookUrl: `${URL}/api/webhook`,
       primaryCategory: "social",
       "tags": [
-        "example",
-        "mini app",
-        "Base App"
+        "e-commerce",
+        "marketplace",
+        "buy and sell",
+        "onchain market"
       ],
       heroImageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
       tagline: process.env.NEXT_PUBLIC_APP_TAGLINE,
