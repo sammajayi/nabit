@@ -26,8 +26,8 @@ export default function Navbar() {
   if (loading) return <div>Loading...</div>;
 
   return (
-    <header className="flex justify-between items-center mb-3 h-11">
-      <div className="flex gap-16">
+    <header className="flex items-center justify-between" >
+      <div className="">
         <div className="">
           <h1 className="text-black font-extrabold text-3xl items-center">
             Nabit
@@ -35,17 +35,15 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Wallet Address on the right side */}
+   
       <div className="flex items-center gap-4 rounded-xl px-4 py-2 ">
         {isConnected && address ? (
           user && user.username ? (
-            <div >
-              <div className="flex items-center space-x-3">
-                
+            <>
               
-              <div><span className="font-extrabold text-black" >Hello,</span> <span className="font-normal text-black text-[9px] mb-1">@{user.username}</span></div>
+                
             
-              <div className="w-7 h-7 rounded-full overflow-hidden border border-gray-300 shadow mb-1">
+              <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-gray-400 shadow mb-1">
                 <Image
                   src={user.pfp_url ?? ""}
                   alt={user.display_name ?? ""}
@@ -54,15 +52,15 @@ export default function Navbar() {
                   className="object-cover w-full h-full"
                 />
               </div>
-              </div>
+          
             
               <button
                 onClick={() => disconnect()}
                 className="text-[7px] text-red-500 hover:text-red-700 underline justify-center"
               >
-                Logout
+                
               </button>
-            </div>
+              </>
           ) : (
             null
           )

@@ -16,9 +16,9 @@ export async function GET() {
 
   return Response.json({
     accountAssociation: {
-      header: process.env.FARCASTER_HEADER,
-      payload: process.env.FARCASTER_PAYLOAD,
-      signature: process.env.FARCASTER_SIGNATURE,
+      header: process.env.NEXT_PUBLIC_FARCASTER_HEADER,
+      payload: process.env.NEXT_PUBLIC_FARCASTER_PAYLOAD,
+      signature: process.env.NEXT_PUBLIC_FARCASTER_SIGNATURE,
     },
     frame: withValidProperties({
       version: "1",
@@ -31,8 +31,12 @@ export async function GET() {
       splashBackgroundColor: process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR,
       homeUrl: URL,
       webhookUrl: `${URL}/api/webhook`,
-      primaryCategory: process.env.NEXT_PUBLIC_APP_PRIMARY_CATEGORY,
-      tags: [],
+      primaryCategory: "social",
+      "tags": [
+        "example",
+        "mini app",
+        "Base App"
+      ],
       heroImageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
       tagline: process.env.NEXT_PUBLIC_APP_TAGLINE,
       ogTitle: process.env.NEXT_PUBLIC_APP_OG_TITLE,

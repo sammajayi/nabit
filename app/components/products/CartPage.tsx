@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { Trash2, Plus, Minus } from "lucide-react";
 
+
+
 type Product = {
   name: string;
   images: string[];
@@ -18,6 +20,7 @@ type CartPageProps = {
 
 export default function CartPage({ cartItems = [], onUpdateCart }: CartPageProps) {
   const [cart, setCart] = useState<Product[]>(cartItems || []);
+ 
 
   // Group items by name and count quantities
   const groupedItems = cart.reduce((acc, item) => {
@@ -55,6 +58,47 @@ export default function CartPage({ cartItems = [], onUpdateCart }: CartPageProps
 
   const getTotalPrice = () => {
     return cart.reduce((total, item) => total + Number(item.price), 0);
+  };
+
+  const handleCheckout = async () => {
+    if (!cart.length) {
+      alert("Your cart is empty.");
+      return;
+    }
+
+    // Group items for description
+    const grouped = cart.reduce((acc, item) => {
+      acc[item.name] = acc[item.name] ? acc[item.name] + 1 : 1;
+      return acc;
+    }, {} as Record<string, number>);
+
+    const description = Object.entries(grouped)
+      .map(([name, qty]) => `${qty}x ${name}`)
+      .join(", ");
+
+    const totalAmount = getTotalPrice();
+
+    const chargeData = {
+      name: "Cart Checkout",
+      description,
+      pricing_type: "fixed_price",
+      local_price: {
+        amount: totalAmount.toFixed(2),
+        currency: "USD"
+      }
+    };
+
+    const res = await fetch('/api/commerce/charge', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(chargeData),
+    });
+    const data = await res.json();
+    if (data && data.id) {
+      // setChargeId(data.id); // Save chargeId in state - REMOVED
+    } else {
+      alert("Failed to create charge. Please try again.");
+    }
   };
 
   return (
@@ -137,10 +181,15 @@ export default function CartPage({ cartItems = [], onUpdateCart }: CartPageProps
               <span className="text-lg font-semibold text-black">Total Price:</span>
               <span className="text-2xl font-bold text-blue-600">${getTotalPrice().toFixed(2)}</span>
             </div>
-            <button className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition text-lg">
+            <button
+              className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition text-lg"
+              onClick={handleCheckout}
+            >
               Proceed to Checkout
             </button>
           </div>
+
+      
         </>
       )}
     </div>

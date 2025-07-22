@@ -1,7 +1,8 @@
 "use client";
 import Image from "next/image";
 // import { useRouter } from "next/navigation";
-import { useState } from "react";
+// import { useState } from "react";
+import { Checkout, CheckoutButton, CheckoutStatus } from '@coinbase/onchainkit/checkout';
 
 type Product = {
   name: string;
@@ -17,9 +18,9 @@ type ProductCardProps = {
   onAddToCart?: (product: Product) => void;
 };
 
-export function ProductCard({ product, onAddToCart }: ProductCardProps) {
+export function ProductCard({ product, /*onAddToCart*/ }: ProductCardProps) {
   // const router = useRouter();
-  const [isAdded, setIsAdded] = useState(false);
+  // const [isAdded, setIsAdded] = useState(false);
 
   return (
     <div className="bg-white rounded-2xl shadow-lg p-5 flex flex-col items-center relative overflow-hidden min-w-[180px] max-w-xs w-full">
@@ -39,7 +40,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
         </div>
         <div className="text-gray-500 text-xs mb-2 font-semibold">{product.category}</div>
         <div className="text-gray-700 text-sm mb-4 line-clamp-2">{product.description}</div>
-        <button
+        {/* <button
           onClick={(e) => {
             e.stopPropagation();
             onAddToCart?.(product);
@@ -48,7 +49,12 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
           className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition text-base"
         >
           {isAdded ? "Added to Cart" : "Add to Cart"}
-        </button>
+        </button> */}
+
+        <Checkout productId='59c07652-724b-4eed-aa8d-2520b1907ed2' >
+          <CheckoutButton text="Nab Now" coinbaseBranded />
+          <CheckoutStatus />
+        </Checkout>
       </div>
     </div>
   );

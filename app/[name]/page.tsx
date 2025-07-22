@@ -1,6 +1,8 @@
 "use client";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
+import { Checkout, CheckoutButton, CheckoutStatus } from '@coinbase/onchainkit/checkout';
+
 
 // Import your mockProducts array or fetch from backend
 import { mockProducts } from "../components/products/mockProducts"; 
@@ -55,9 +57,10 @@ export default function ProductDetailsPage() {
           </div>
         </div> */}
         {/* Buy Now Button */}
-        <button className="w-full bg-blue-600 text-white font-bold py-3 rounded-xl mt-6">
-          Buy Now
-        </button>
+        <Checkout productId='59c07652-724b-4eed-aa8d-2520b1907ed2' >
+          <CheckoutButton text="Nab Now" coinbaseBranded />
+          <CheckoutStatus />
+        </Checkout>
       </div>
     </div>
   );
