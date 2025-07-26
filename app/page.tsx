@@ -83,7 +83,10 @@ function Homepage() {
       </div>
     </div>
   );
+
 }
+
+
 
 export default function App() {
     const { setFrameReady, isFrameReady } = useMiniKit();

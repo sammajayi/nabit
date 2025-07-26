@@ -39,7 +39,10 @@ export async function GET() {
         "e-commerce",
         "marketplace",
         "buy and sell",
-        "onchain market"
+        "onchain market",
+        "shopping",
+        "products",
+        "onlinestore",
       ],
       heroImageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
       tagline: process.env.NEXT_PUBLIC_APP_TAGLINE,

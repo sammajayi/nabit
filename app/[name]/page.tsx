@@ -43,7 +43,7 @@ export default function ProductDetailsPage() {
           <div className="text-blue-600 font-bold text-lg">${product.price}</div>
         </div>
        
-        {/* <div className="mb-4">
+        <div className="mb-4">
           <span className="font-bold text-black">Variations</span>
           <div className="flex gap-2 mt-2">
             <span className="bg-gray-100 px-3 py-1 rounded-full text-sm">Black</span>
@@ -55,7 +55,7 @@ export default function ProductDetailsPage() {
             <span className="bg-gray-100 px-3 py-1 rounded-full text-sm">Medium</span>
             <span className="bg-gray-100 px-3 py-1 rounded-full text-sm">Large</span>
           </div>
-        </div> */}
+        </div>
         {/* Buy Now Button */}
         <Checkout productId='59c07652-724b-4eed-aa8d-2520b1907ed2' >
           <CheckoutButton text="Nab Now" coinbaseBranded />

@@ -38,7 +38,7 @@ export function ProductCard({ product, /*onAddToCart*/ }: ProductCardProps) {
           <span className="font-extrabold text-lg text-black truncate">{product.name}</span>
           <span className="text-blue-600 font-bold text-lg">${product.price}</span>
         </div>
-        <div className="text-gray-500 text-xs mb-2 font-semibold">{product.category}</div>
+        {/* <div className="text-gray-500 text-xs mb-2 font-semibold">{product.category}</div> */}
         <div className="text-gray-700 text-sm mb-4 line-clamp-2">{product.description}</div>
         {/* <button
           onClick={(e) => {
