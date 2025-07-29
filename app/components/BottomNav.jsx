@@ -3,7 +3,7 @@ import { Home, ShoppingCart, PlusCircle, User } from 'lucide-react';
 
 const navItems = [
   { label: "Home", icon: Home },
-  { label: "Shop", icon: ShoppingCart },
+  { label: "Cart", icon: ShoppingCart },
   { label: "Create", icon: PlusCircle },
   { label: "Profile", icon: User },
 ];

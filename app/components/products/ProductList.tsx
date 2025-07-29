@@ -80,7 +80,7 @@ export default function ProductList({ onAddToCart }: ProductListProps) {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="bg-[#e9eef4] rounded-xl px-4 py-3 w-full placeholder:text-gray-300 text-black text-lg outline-none"
+            className="bg-[#e9eef4] rounded-xl px-4 py-2 w-full placeholder:text-gray-300 text-black text-xs outline-none"
             placeholder="Search products"
           />
         </div>

@@ -45,7 +45,7 @@ export default function Navbar() {
       .finally(() => setLoading(false));
   }, [fid]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return null;
 
   return (
     <header className="flex items-center justify-between" >
