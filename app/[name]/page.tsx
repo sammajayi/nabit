@@ -4,7 +4,7 @@ import Image from "next/image";
 import { Checkout, CheckoutButton, CheckoutStatus } from '@coinbase/onchainkit/checkout';
 
 
-// Import your mockProducts array or fetch from backend
+
 import { mockProducts } from "../components/products/mockProducts"; 
 
 export default function ProductDetailsPage() {
@@ -18,13 +18,13 @@ export default function ProductDetailsPage() {
 
   return (
     <div className="min-h-screen bg-white max-w-md mx-auto">
-      {/* Header */}
+      
       <div className="flex items-center justify-between px-4 pt-6 pb-2">
         <button onClick={() => router.back()} className="text-2xl font-bold text-black">&larr;</button>
         <h1 className="text-lg font-bold text-black flex-1 text-center">Product Details</h1>
-        <span className="w-8" /> {/* Spacer */}
+        <span className="w-8" /> 
       </div>
-      {/* Main Image */}
+     
       <div className="w-full aspect-square relative mb-4">
         <Image
           src={product.images[0]}
@@ -34,7 +34,7 @@ export default function ProductDetailsPage() {
           sizes="100vw"
         />
       </div>
-      {/* Product Info */}
+     
       <div className="px-4">
         <h2 className="text-xl font-bold mb-2 text-black">{product.name}</h2>
         <div className="text-gray-700 mb-4">{product.description}</div>
