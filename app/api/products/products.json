@@ -1,17 +1,18 @@
 [
   {
-    "id": "1753902086064",
-    "name": "abc",
-    "description": "gfcjgbjnjsan\r\nnjkabcksb\r\nafnjn smfdnkn\r\njabjdj",
-    "price": "100",
+    "id": "1753914487201",
+    "name": "Macbook 2019",
+    "description": "16gb/512gb",
+    "price": "1",
     "category": "Tech",
-    "seller_image": null,
-    "seller_display_name": null,
     "images": [
-      "/uploads/1753902086062-9169d296-c7f8-40fc-ba35-bc2f43a4f028.jpg"
+      "/uploads/1753914487198-1000001272.jpg"
     ],
     "document": null,
-    "fid": null,
-    "createdAt": "2025-07-30T19:01:26.064Z"
+    "fid": "875984",
+    "seller_image": "https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/d6629f66-14bd-4e8e-fc51-f4d6d41bff00/rectcrop3",
+    "seller_display_name": "Sam",
+    "owner": "Sam",
+    "createdAt": "2025-07-30T22:28:07.201Z"
   }
 ]

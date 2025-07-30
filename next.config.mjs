@@ -3,6 +3,12 @@ const nextConfig = {
   // Silence warnings
   // https://github.com/WalletConnect/walletconnect-monorepo/issues/1908
 
+  turbopack: {
+    rules: {
+
+    },
+  },
+
   images: {
     remotePatterns: [
       {

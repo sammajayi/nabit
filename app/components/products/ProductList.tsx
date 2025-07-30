@@ -28,10 +28,10 @@ type ProductListProps = {
   onAddToCart?: (product: Product) => void;
 };
 
-export default function ProductList({  }: ProductListProps) {
+export default function ProductList({ }: ProductListProps) {
   const [activeTab, setActiveTab] = useState("Home");
   const [loading, setLoading] = useState(true);
-  const [products, setProducts] = useState<any[]>([]);
+  const [products, setProducts] = useState<Product[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   // const { address, isConnected } = useAccount();
   const router = useRouter();
@@ -43,7 +43,7 @@ export default function ProductList({  }: ProductListProps) {
         const res = await fetch("/api/products");
         const data = await res.json();
         setProducts(data);
-      } catch (err) {
+      } catch  {
         setProducts([]);
       } finally {
         setLoading(false);
@@ -55,11 +55,11 @@ export default function ProductList({  }: ProductListProps) {
   // Filter products by active category and search term
   const filteredProducts = products.filter((product) => {
     const matchesCategory = activeTab === "Home" || product.category === activeTab;
-    const matchesSearch = searchTerm === "" || 
+    const matchesSearch = searchTerm === "" ||
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
       product.category.toLowerCase().includes(searchTerm.toLowerCase());
-    
+
     return matchesCategory && matchesSearch;
   });
 
@@ -67,7 +67,7 @@ export default function ProductList({  }: ProductListProps) {
     <div className="w-full max-w-md mx-auto px-4 py-3 bg-[#f7f9fb] min-h-screen">
       <Navbar />
       <div>
-      
+
 
         <div className="px-4 mb-2">
           <input
@@ -86,15 +86,15 @@ export default function ProductList({  }: ProductListProps) {
               key={category.id}
               onClick={() => setActiveTab(category.id)}
               className={`pb-2 text-lg font-medium transition-colors ${activeTab === category.id
-                  ? "text-blue-600 border-b-2 border-blue-600"
-                  : "text-gray-400 border-b-2 border-transparent"
+                ? "text-blue-600 border-b-2 border-blue-600"
+                : "text-gray-400 border-b-2 border-transparent"
                 }`}
             >
               {category.label}
             </button>
           ))}
         </div>
-        
+
         {/* Products Section */}
         <div className="px-4 mt-4">
           {loading ? (
@@ -113,7 +113,7 @@ export default function ProductList({  }: ProductListProps) {
                 >
                   <ProductCard
                     product={product}
-                    // onAddToCart={onAddToCart}
+                  // onAddToCart={onAddToCart}
                   />
                 </div>
               ))}

@@ -7,7 +7,14 @@ export default function Profile() {
   const [user, setUser] = useState<Partial<NeynarUser> | null>(null);
   const [, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [products, setProducts] = useState<any[]>([]);
+  type Product = {
+    id: string;
+    name: string;
+    category: string;
+    price: number;
+  };
+
+  const [products, setProducts] = useState<Product[]>([]);
   const [productsLoading, setProductsLoading] = useState(false);
   const [productsError, setProductsError] = useState<string | null>(null);
 
@@ -97,6 +104,7 @@ export default function Profile() {
           <span className="text-xs text-gray-500">Total Made</span>
         </div>
       </div>
+      
      {/* User's Products */}
      <div className="w-full mt-6">
        <h2 className="text-lg font-bold mb-2">My Listings</h2>
@@ -119,10 +127,7 @@ export default function Profile() {
        )}
      </div>
 
-     {/* Order History */}
-     <div className="w-full mt-6">
-       <h3 className='text-black font-semibold'>Order History</h3>
-     </div>
+  
     </div>
   );
 }

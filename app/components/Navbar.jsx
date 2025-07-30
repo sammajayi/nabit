@@ -49,7 +49,7 @@ export default function Navbar() {
   if (error) return <div className="text-red-500">Error: {error}</div>;
 
   return (
-    <header className="flex items-center justify-between" >
+    <header className="flex items-center justify-between " >
       <div className="">
         <div className="">
           <Image 

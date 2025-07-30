@@ -56,22 +56,9 @@ async function saveFile(file: File): Promise<string> {
 export async function GET(req: NextRequest): Promise<NextResponse> {
   const products: Product[] = await readProducts();
   const fid = req.nextUrl.searchParams.get("fid");
-  const name = req.nextUrl.searchParams.get("name");
-  
   if (fid) {
     return NextResponse.json(products.filter((p: Product) => p.fid === fid));
   }
-  
-  if (name) {
-    const decodedName = decodeURIComponent(name);
-    const product = products.find((p: Product) => p.name === decodedName);
-    if (product) {
-      return NextResponse.json(product);
-    } else {
-      return NextResponse.json({ error: "Product not found" }, { status: 404 });
-    }
-  }
-  
   return NextResponse.json(products);
 }
 

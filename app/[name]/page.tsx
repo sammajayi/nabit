@@ -3,12 +3,26 @@ import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { BasePayButton } from '@base-org/account-ui/react';
 import { pay, getPaymentStatus } from '@base-org/account';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Navbar from "../components/Navbar";
 import { ArrowLeft, Share2Icon } from "lucide-react";
 import SuccessPage from "../components/SuccessPage";
 
-import { mockProducts } from "../components/products/mockProducts"; 
+// Define the Product type to match the API
+interface Product {
+  id: string;
+  name: string;
+  description: string;
+  price: number | string;
+  category: string;
+  images: string[];
+  document?: string | null;
+  fid?: string | null;
+  seller_image?: string | null;
+  seller_display_name?: string | null;
+  owner?: string;
+  createdAt: string;
+} 
 
 export default function ProductDetailsPage() {
   const params = useParams();
@@ -17,12 +31,67 @@ export default function ProductDetailsPage() {
   const [paymentId, setPaymentId] = useState('');
   const [showReviews, setShowReviews] = useState(false);
   const [showSuccessPage, setShowSuccessPage] = useState(false);
+  const [product, setProduct] = useState<Product | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const product = mockProducts.find(
-    (p) => encodeURIComponent(p.name) === params.name
-  );
+  // Fetch product data from API
+  useEffect(() => {
+    const fetchProduct = async () => {
+      try {
+        setLoading(true);
+        const productName = decodeURIComponent(params.name as string);
+        
+        // Try to fetch the specific product by name first
+        const response = await fetch(`/api/products?name=${encodeURIComponent(productName)}`);
+        
+        if (response.ok) {
+          const productData: Product = await response.json();
+          setProduct(productData);
+        } else if (response.status === 404) {
+          setError('Product not found');
+        } else {
+          throw new Error('Failed to fetch product');
+        }
+      } catch (err) {
+        console.error('Error fetching product:', err);
+        setError('Failed to load product');
+      } finally {
+        setLoading(false);
+      }
+    };
 
-  if (!product) return <div>Product not found</div>;
+    fetchProduct();
+  }, [params.name]);
+
+  // Show loading state
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading product...</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show error state
+  if (error || !product) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-red-600 mb-4">{error || 'Product not found'}</p>
+          <button
+            onClick={() => router.back()}
+            className="bg-blue-500 text-white px-4 py-2 rounded-lg"
+          >
+            Go Back
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const handlePayment = async () => {
     try {
@@ -135,7 +204,12 @@ export default function ProductDetailsPage() {
   ];
 
   if (showSuccessPage) {
-    return <SuccessPage product={product} paymentId={paymentId} onShare={handleShare} />;
+    // Ensure we have a valid product with owner field for SuccessPage
+    const successProduct = {
+      ...product,
+      owner: product.owner || product.seller_display_name || 'Unknown Seller'
+    };
+    return <SuccessPage product={successProduct} paymentId={paymentId} onShare={handleShare} />;
   }
 
   return (
@@ -156,7 +230,7 @@ export default function ProductDetailsPage() {
         <div className="px-4 mb-6">
           <div className="w-full max-w-sm mx-auto aspect-square relative rounded-xl overflow-hidden shadow-lg">
             <Image
-              src={product.images[0]}
+              src={product.images && product.images.length > 0 ? product.images[0] : '/fallback.png'}
               alt={product.name}
               fill
               className="object-cover"
@@ -171,6 +245,18 @@ export default function ProductDetailsPage() {
             <div className="text-gray-600 mb-4 leading-relaxed">{product.description}</div>
             <div className="mb-4">
               <span className="text-3xl font-bold text-blue-600">${product.price}</span>
+            </div>
+            {/* Display seller information if available */}
+            {(product.owner || product.seller_display_name) && (
+              <div className="mb-4 text-gray-500 text-sm">
+                Sold by: {product.owner || product.seller_display_name}
+              </div>
+            )}
+            {/* Display category */}
+            <div className="mb-4">
+              <span className="bg-gray-100 text-gray-800 px-3 py-1 rounded-full text-sm font-medium">
+                {product.category}
+              </span>
             </div>
           </div>
          
