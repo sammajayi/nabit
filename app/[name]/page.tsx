@@ -5,7 +5,8 @@ import { BasePayButton } from '@base-org/account-ui/react';
 import { pay, getPaymentStatus } from '@base-org/account';
 import { useState } from 'react';
 import Navbar from "../components/Navbar";
-import { ArrowLeft} from "lucide-react"
+import { ArrowLeft, Share2Icon } from "lucide-react";
+import SuccessPage from "../SuccessPage/page";
 
 import { mockProducts } from "../components/products/mockProducts"; 
 
@@ -15,6 +16,7 @@ export default function ProductDetailsPage() {
   const [paymentStatus, setPaymentStatus] = useState('');
   const [paymentId, setPaymentId] = useState('');
   const [showReviews, setShowReviews] = useState(false);
+  const [showSuccessPage, setShowSuccessPage] = useState(false);
 
   const product = mockProducts.find(
     (p) => encodeURIComponent(p.name) === params.name
@@ -27,13 +29,14 @@ export default function ProductDetailsPage() {
       setPaymentStatus('Payment initiated...');
       
       const result = await pay({
-        amount: product.price.toString(),
+        amount: product.price.toString(), 
         to: process.env.NEXT_PUBLIC_RECIPIENT_ADDRESS || '0xb3856fAae31C364F1C62A42ccb3E8002B951C027',
-        testnet: true
+        testnet: false,
       });
 
-      const { id } = result as { id: string };
+      console.log('Payment result:', result);
 
+      const { id } = result as { id: string };
       setPaymentId(id);
       setPaymentStatus('Payment initiated! Click "Check Status" to see the result.');
       
@@ -57,9 +60,12 @@ export default function ProductDetailsPage() {
       
       if (status === 'completed') {
         setPaymentStatus('completed');
-      } else if (status === 'pending' || status === 'not_found') {
+        // Show success page instead of just updating status
+        setTimeout(() => setShowSuccessPage(true), 500);
+      } else if (status === 'pending') {
+        // Continue checking if still processing
         setTimeout(() => handleCheckStatus(), 3000);
-      } else if (status === 'failed') {
+      } else if (status === 'failed' || status === 'not_found') {
         setPaymentStatus('Payment failed');
       }
     } catch (error) {
@@ -72,7 +78,7 @@ export default function ProductDetailsPage() {
     if (paymentStatus.includes('completed')) {
       return (
         <div className="w-full bg-green-500 text-white py-3 rounded-lg font-bold text-center">
-          🎉 Order Completed!
+          🎉 Processing Success...
         </div>
       );
     }
@@ -117,7 +123,6 @@ export default function ProductDetailsPage() {
         console.log('Error sharing:', error);
       }
     } else {
-      // Fallback for browsers that don't support Web Share API
       navigator.clipboard.writeText(window.location.href);
       alert('Link copied to clipboard!');
     }
@@ -129,24 +134,24 @@ export default function ProductDetailsPage() {
     { id: 3, name: "Emma L.", rating: 5, comment: "Perfect size and beautiful design. Love it!", date: "2 weeks ago" },
   ];
 
+  if (showSuccessPage) {
+    return <SuccessPage product={product} paymentId={paymentId} onShare={handleShare} />;
+  }
+
   return (
     <div className="min-h-screen bg-gray-50">
-  
+      <div className="fixed bg-white left-1/2 -translate-x-1/2 border-b-2 max-w-md w-full z-20">
+        <Navbar />
+      </div>
+
       <div className="max-w-md mx-auto pt-20 pb-24">
-          <div className="fixed bottom-0 left-1/2 -translate-x-1/2 bg-white border-t max-w-md w-full z-50">
-        <div className="max-w-md mx-auto p-4">
-          <Navbar />
-          </div>
-          </div>
-        {/* </div> */}
-        
-      
         <div className="flex items-center justify-between px-4 pb-4">
-          <button onClick={() => router.back()} className="text-xl font-bold text-black">{<ArrowLeft/>}</button>
+          <button onClick={() => router.back()} className="text-xl font-bold text-black" aria-label="back-button">
+            <ArrowLeft />
+          </button>
           <h1 className="text-lg font-bold text-black flex-1 text-center">Product Details</h1>
           <span className="w-8" /> 
         </div>
-       
 
         <div className="px-4 mb-6">
           <div className="w-full max-w-sm mx-auto aspect-square relative rounded-xl overflow-hidden shadow-lg">
@@ -161,7 +166,6 @@ export default function ProductDetailsPage() {
         </div>
        
         <div className="px-4 space-y-6">
-          {/* Product Info */}
           <div>
             <h2 className="text-2xl font-bold mb-2 text-black">{product.name}</h2>
             <div className="text-gray-600 mb-4 leading-relaxed">{product.description}</div>
@@ -170,7 +174,6 @@ export default function ProductDetailsPage() {
             </div>
           </div>
          
-          {/* Variations - Updated colors */}
           <div>
             <h3 className="font-bold text-black mb-3">Color Options</h3>
             <div className="flex gap-2 mb-4">
@@ -187,8 +190,7 @@ export default function ProductDetailsPage() {
             </div>
           </div>
 
-          {/* Reviews Section */}
-          <div className="border-t pt-6">
+          <div className="border-t py-6">
             <div className="flex items-center justify-between mb-4">
               <h3 className="font-bold text-black text-lg">Customer Reviews</h3>
               <button 
@@ -217,49 +219,26 @@ export default function ProductDetailsPage() {
                 ))}
               </div>
             )}
+          </div>
+        </div>
+      </div>
 
       <div className="fixed bottom-0 left-1/2 -translate-x-1/2 bg-white border-t max-w-md w-full z-50">
         <div className="max-w-md mx-auto p-4">
           <div className="flex gap-3">
-           
             <div className="flex-1">
               {getButtonContent()}
             </div>
-
-       
             <button
               onClick={handleShare}
               className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-6 py-3 rounded-lg font-medium transition flex items-center gap-2"
             >
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z" />
-              </svg>
+             <Share2Icon width={20} height={20} aria-label="Share" />
               Share
-              </button>
-            </div>
+            </button>
           </div>
         </div>
       </div>
-
-
-
-            
-          </div>
-
-
-
-
-
-          
-        </div>
-
-
-
-        
-      </div>
-
-   
-
-   
+    </div>
   );
 }

@@ -15,18 +15,16 @@ type Product = {
 
 type ProductCardProps = {
   product: Product;
-  onAddToCart?: (product: Product) => void;
   onPaymentComplete?: (product: Product, paymentId: string) => void;
   recipientAddress?: string;
   testnet?: boolean;
-  collectUserInfo?: boolean;
 };
 
 export function ProductCard({
   product,
   onPaymentComplete,
   recipientAddress = process.env.NEXT_PUBLIC_RECIPIENT_ADDRESS || '0xb3856fAae31C364F1C62A42ccb3E8002B951C027',
-  testnet = true,
+  testnet = false,
 }: ProductCardProps) {
   const [paymentStatus, setPaymentStatus] = useState('');
   const [paymentId, setPaymentId] = useState('');
@@ -36,17 +34,15 @@ export function ProductCard({
       setPaymentStatus('Payment initiated...');
       
       const result = await pay({
-        amount: product.price.toString(), 
-        to: recipientAddress, 
-        testnet: testnet 
+        amount: product.price.toString(),
+        to: recipientAddress,
+        testnet: testnet
       });
 
       const { id } = result as { id: string };
-
       setPaymentId(id);
       setPaymentStatus('Payment initiated! Click "Check Status" to see the result.');
       
-      // Auto-check status after payment initiation
       setTimeout(() => handleCheckStatus(), 2000);
       
     } catch (error) {
@@ -56,9 +52,7 @@ export function ProductCard({
   };
 
   const handleCheckStatus = async () => {
-    if (!paymentId) {
-      return;
-    }
+    if (!paymentId) return;
 
     try {
       const { status } = await getPaymentStatus({ id: paymentId });
@@ -66,11 +60,8 @@ export function ProductCard({
       
       if (status === 'completed') {
         setPaymentStatus('completed');
-        if (onPaymentComplete) {
-          onPaymentComplete(product, paymentId);
-        }
+        onPaymentComplete?.(product, paymentId);
       } else if (status === 'pending') {
-        // Continue checking if still processing
         setTimeout(() => handleCheckStatus(), 3000);
       } else if (status === 'failed' || status === 'not_found') {
         setPaymentStatus('Payment failed');
@@ -83,20 +74,11 @@ export function ProductCard({
 
   const getButtonContent = () => {
     if (paymentStatus.includes('completed')) {
-      return (
-        <div className="w-full bg-green-500 text-white py-3 rounded-lg font-bold text-center">
-          Successful!
-        </div>
-      );
+      return 
     }
     
     if (paymentStatus.includes('initiated')) {
-      return (
-        <div className="w-full bg-blue-500 text-white py-3 rounded-lg font-bold text-center flex items-center justify-center gap-2">
-          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-          Processing...
-        </div>
-      );
+      return 
     }
     
     if (paymentStatus.includes('failed')) {
@@ -114,7 +96,6 @@ export function ProductCard({
       <BasePayButton
         colorScheme="light"
         onClick={handlePayment}
-      
       />
     );
   };
@@ -144,14 +125,6 @@ export function ProductCard({
 
         <div className="w-full">
           {getButtonContent()}
-          {paymentId && (
-            <button
-              onClick={handleCheckStatus}
-              className="w-full mt-2 bg-gray-200 hover:bg-gray-300 text-black py-2 rounded-lg font-semibold text-center transition-colors"
-            >
-              Check Status
-            </button>
-          )}
         </div>
       </div>
     </div>

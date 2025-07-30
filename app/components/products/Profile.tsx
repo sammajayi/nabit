@@ -14,9 +14,9 @@ export default function Profile() {
 
 
   const stats = {
-    listings: 12,
-    sold: 8,
-    total: 2.5, // ETH or your currency
+    listings: 0,
+    sold: 0,
+    total: 0, 
   };
 
   useEffect(() => {
@@ -86,6 +86,10 @@ export default function Profile() {
           <span className="font-semibold text-gray-800">{stats.total} ETH</span>
           <span className="text-xs text-gray-500">Total Made</span>
         </div>
+      </div>
+
+      <div>
+        <h3 className='text-black font-semibold'>Order History</h3>
       </div>
     </div>
   );
