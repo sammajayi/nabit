@@ -27,7 +27,7 @@ export function ProductCard({
   // onAddToCart, 
   onPaymentComplete,
   recipientAddress = process.env.NEXT_PUBLIC_RECIPIENT_ADDRESS || '0xb3856fAae31C364F1C62A42ccb3E8002B951C027',
-  testnet = true,
+  testnet = false,
 }: ProductCardProps) {
   const [paymentStatus, setPaymentStatus] = useState('');
   const [paymentId, setPaymentId] = useState('');
