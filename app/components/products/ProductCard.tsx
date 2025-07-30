@@ -45,12 +45,15 @@ export function ProductCard({
 
       setPaymentId(id);
       setPaymentStatus('Payment initiated! Click "Check Status" to see the result.');
+      
+      // Auto-check status after payment initiation
+      setTimeout(() => handleCheckStatus(), 2000);
+      
     } catch (error) {
       console.error('Payment failed:', error);
       setPaymentStatus('Payment failed');
     }
   };
-
 
   const handleCheckStatus = async () => {
     if (!paymentId) {
@@ -61,11 +64,20 @@ export function ProductCard({
       const { status } = await getPaymentStatus({ id: paymentId });
       setPaymentStatus(`Payment status: ${status}`);
       
-      if (status === 'completed' && onPaymentComplete) {
-        onPaymentComplete(product, paymentId);
+      if (status === 'completed') {
+        setPaymentStatus('completed');
+        if (onPaymentComplete) {
+          onPaymentComplete(product, paymentId);
+        }
+      } else if (status === 'pending') {
+        // Continue checking if still processing
+        setTimeout(() => handleCheckStatus(), 3000);
+      } else if (status === 'failed' || status === 'not_found') {
+        setPaymentStatus('Payment failed');
       }
     } catch (error) {
       console.error('Status check failed:', error);
+      setPaymentStatus('Status check failed');
     }
   };
 
@@ -73,7 +85,7 @@ export function ProductCard({
     if (paymentStatus.includes('completed')) {
       return (
         <div className="w-full bg-green-500 text-white py-3 rounded-lg font-bold text-center">
-           Payment Completed!
+          Successful!
         </div>
       );
     }
