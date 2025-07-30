@@ -15,16 +15,19 @@ type Product = {
 
 type ProductCardProps = {
   product: Product;
+  // onAddToCart?: (product: Product) => void;
   onPaymentComplete?: (product: Product, paymentId: string) => void;
   recipientAddress?: string;
   testnet?: boolean;
+  collectUserInfo?: boolean;
 };
 
 export function ProductCard({
   product,
+  // onAddToCart, 
   onPaymentComplete,
   recipientAddress = process.env.NEXT_PUBLIC_RECIPIENT_ADDRESS || '0xb3856fAae31C364F1C62A42ccb3E8002B951C027',
-  testnet = false,
+  testnet = true,
 }: ProductCardProps) {
   const [paymentStatus, setPaymentStatus] = useState('');
   const [paymentId, setPaymentId] = useState('');
@@ -34,15 +37,17 @@ export function ProductCard({
       setPaymentStatus('Payment initiated...');
       
       const result = await pay({
-        amount: product.price.toString(),
-        to: recipientAddress,
-        testnet: testnet
+        amount: product.price.toString(), 
+        to: recipientAddress, 
+        testnet: testnet 
       });
 
       const { id } = result as { id: string };
+
       setPaymentId(id);
       setPaymentStatus('Payment initiated! Click "Check Status" to see the result.');
       
+      // Auto-check status after payment initiation
       setTimeout(() => handleCheckStatus(), 2000);
       
     } catch (error) {
@@ -52,7 +57,9 @@ export function ProductCard({
   };
 
   const handleCheckStatus = async () => {
-    if (!paymentId) return;
+    if (!paymentId) {
+      return;
+    }
 
     try {
       const { status } = await getPaymentStatus({ id: paymentId });
@@ -60,8 +67,11 @@ export function ProductCard({
       
       if (status === 'completed') {
         setPaymentStatus('completed');
-        onPaymentComplete?.(product, paymentId);
+        if (onPaymentComplete) {
+          onPaymentComplete(product, paymentId);
+        }
       } else if (status === 'pending') {
+        // Continue checking if still processing
         setTimeout(() => handleCheckStatus(), 3000);
       } else if (status === 'failed' || status === 'not_found') {
         setPaymentStatus('Payment failed');
@@ -74,11 +84,20 @@ export function ProductCard({
 
   const getButtonContent = () => {
     if (paymentStatus.includes('completed')) {
-      return 
+      return (
+        <div className="w-full bg-green-500 text-white py-3 rounded-lg font-bold text-center">
+          Successful!
+        </div>
+      );
     }
     
     if (paymentStatus.includes('initiated')) {
-      return 
+      return (
+        <div className="w-full bg-blue-500 text-white py-3 rounded-lg font-bold text-center flex items-center justify-center gap-2">
+          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          Processing...
+        </div>
+      );
     }
     
     if (paymentStatus.includes('failed')) {
