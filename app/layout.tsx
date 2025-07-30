@@ -3,6 +3,7 @@ import "@coinbase/onchainkit/styles.css";
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
+import { Toaster } from 'sonner';
 
 
 export const viewport: Viewport = {
@@ -44,6 +45,11 @@ export default function RootLayout({
           {children}
 
         </Providers>
+        <Toaster 
+          position="top-center"
+          richColors
+          closeButton
+        />
       </body>
     </html>
   );

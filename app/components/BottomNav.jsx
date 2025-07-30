@@ -1,9 +1,11 @@
 import React from "react";
-import { Home, ShoppingCart, PlusCircle, User } from 'lucide-react';
+import { Home, PlusCircle, User } from 'lucide-react';
+
+
 
 const navItems = [
   { label: "Home", icon: Home },
-  { label: "Cart", icon: ShoppingCart },
+  // { label: "Cart", icon: ShoppingCart },
   { label: "Create", icon: PlusCircle },
   { label: "Profile", icon: User },
 ];
