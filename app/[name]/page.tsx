@@ -6,7 +6,7 @@ import { pay, getPaymentStatus } from '@base-org/account';
 import { useState } from 'react';
 import Navbar from "../components/Navbar";
 import { ArrowLeft, Share2Icon } from "lucide-react";
-import SuccessPage from "../SuccessPage/page";
+import SuccessPage from "../components/SuccessPage";
 
 import { mockProducts } from "../components/products/mockProducts"; 
 

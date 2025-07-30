@@ -25,7 +25,7 @@ export default function SuccessPage({ product, paymentId, onShare }: SuccessPage
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-blue-50 flex items-center justify-center p-4">
       <div className="max-w-md w-full">
         <div className="bg-white rounded-3xl shadow-2xl p-8 text-center">
-      
+          {/* Success Icon */}
           <div className="mb-6">
             <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
               <CheckCircle className="w-12 h-12 text-green-600" />
@@ -34,7 +34,7 @@ export default function SuccessPage({ product, paymentId, onShare }: SuccessPage
             <p className="text-gray-600">Your payment has been processed successfully</p>
           </div>
 
-         
+          {/* Order Details */}
           <div className="bg-gray-50 rounded-2xl p-6 mb-6">
             <div className="flex items-center gap-4 mb-4">
               <div className="w-16 h-16 rounded-xl overflow-hidden flex-shrink-0">
@@ -67,7 +67,7 @@ export default function SuccessPage({ product, paymentId, onShare }: SuccessPage
             </div>
           </div>
 
-          
+          {/* Action Buttons */}
           <div className="space-y-3">
             <button
               onClick={() => router.push('/')}
@@ -88,7 +88,7 @@ export default function SuccessPage({ product, paymentId, onShare }: SuccessPage
             </button>
           </div>
 
-      
+          {/* Thank You Message */}
           <div className="mt-6 pt-6 border-t">
             <p className="text-sm text-gray-500">
               Thank you for your purchase! You&apos;ll receive a confirmation email shortly.
