@@ -7,6 +7,9 @@ export default function Profile() {
   const [user, setUser] = useState<Partial<NeynarUser> | null>(null);
   const [, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [products, setProducts] = useState<any[]>([]);
+  const [productsLoading, setProductsLoading] = useState(false);
+  const [productsError, setProductsError] = useState<string | null>(null);
 
 
 
@@ -46,6 +49,13 @@ export default function Profile() {
         setUser(null);
       })
       .finally(() => setLoading(false));
+    // Fetch products for this user
+    setProductsLoading(true);
+    fetch(`/api/products?fid=${fid}`)
+      .then(res => res.ok ? res.json() : Promise.reject("Failed to fetch products"))
+      .then(data => setProducts(data))
+      .catch(err => setProductsError(err.message))
+      .finally(() => setProductsLoading(false));
   }, [fid]);
 
   if (loading) return <div>Loading...</div>;
@@ -82,6 +92,27 @@ export default function Profile() {
           <span className="text-xs text-gray-500">Total Made</span>
         </div>
       </div>
+     {/* User's Products */}
+     <div className="w-full mt-6">
+       <h2 className="text-lg font-bold mb-2">My Listings</h2>
+       {productsLoading ? (
+         <div>Loading products...</div>
+       ) : productsError ? (
+         <div className="text-red-500">{productsError}</div>
+       ) : products.length === 0 ? (
+         <div className="text-gray-400">No products listed yet.</div>
+       ) : (
+         <ul className="space-y-2">
+           {products.map((product) => (
+             <li key={product.id} className="border rounded p-2 flex flex-col">
+               <span className="font-semibold">{product.name}</span>
+               <span className="text-xs text-gray-500">{product.category}</span>
+               <span className="text-sm">${product.price}</span>
+             </li>
+           ))}
+         </ul>
+       )}
+     </div>
     </div>
   );
 }

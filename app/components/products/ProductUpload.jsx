@@ -1,5 +1,6 @@
 import Image from "next/image";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
+import { useFarcasterFid } from "../../hooks/useFarcasterFid";
 
 export default function ProductUpload() {
   const [formData, setFormData] = useState({
@@ -17,6 +18,18 @@ export default function ProductUpload() {
   const [uploadStatus, setUploadStatus] = useState({ type: "", message: "" });
   const imageInputRef = useRef(null);
   const documentInputRef = useRef(null);
+
+  // Seller info state
+  const fid = useFarcasterFid();
+  const [sellerProfile, setSellerProfile] = useState(null);
+
+  useEffect(() => {
+    if (!fid) return;
+    fetch(`/api/farcaster/user?fid=${fid}`)
+      .then(res => res.ok ? res.json() : null)
+      .then(data => setSellerProfile(data))
+      .catch(() => setSellerProfile(null));
+  }, [fid]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -40,12 +53,19 @@ export default function ProductUpload() {
         submitData.append("document", documentFile);
       }
 
+      // Inject seller info if available
+      if (sellerProfile) {
+        submitData.append("seller_image", sellerProfile.pfp_url || "");
+        submitData.append("seller_display_name", sellerProfile.display_name || "");
+      }
+
       // Send to backend through API
       const response = await fetch(
-        "https://coinbase-api.onrender.com/api/products",
+        "/api/products",
         {
           method: "POST",
           body: submitData,
+          headers: fid ? { "x-user-fid": fid } : {},
         },
       );
 

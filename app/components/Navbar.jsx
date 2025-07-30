@@ -9,7 +9,7 @@ import { useFarcasterFid } from "../hooks/useFarcasterFid";
 export default function Navbar() {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [, setError] = useState(null);
+  const [error, setError] = useState(null);
   const { address, isConnected } = useAccount();
   const { disconnect } = useDisconnect();
   
@@ -46,6 +46,7 @@ export default function Navbar() {
   }, [fid]);
 
   if (loading) return <div>Loading...</div>;
+  if (error) return <div className="text-red-500">Error: {error}</div>;
 
   return (
     <header className="flex items-center justify-between" >

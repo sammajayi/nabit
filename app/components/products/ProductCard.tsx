@@ -11,6 +11,9 @@ type Product = {
   description: string;
   category: string;
   owner: string;
+  seller_image?: string; // Added for seller info
+  seller_display_name?: string; // Added for seller info
+  fid?: string; // Added for fallback seller name
 };
 
 type ProductCardProps = {
@@ -22,16 +25,38 @@ export function ProductCard({ product, /*onAddToCart*/ }: ProductCardProps) {
   // const router = useRouter();
   // const [isAdded, setIsAdded] = useState(false);
 
+  const imageSrc =
+    typeof product.images[0] === "string" && product.images[0].trim() !== ""
+      ? product.images[0]
+      : "/fallback.png";
+
   return (
     <div className="bg-white rounded-2xl shadow-lg p-5 flex flex-col items-center relative overflow-hidden min-w-[180px] max-w-xs w-full">
-      <div className="w-full mb-3 aspect-square overflow-hidden rounded-xl">
+      <div className="w-full mb-3 aspect-square overflow-hidden rounded-xl bg-gray-100">
         <Image
-          src={product.images[0] || "/fallback.png"}
+          src={imageSrc}
           alt={product.name}
           width={320}
           height={320}
           className="object-cover w-full h-full"
+          onError={(e) => {
+            console.log("Image failed to load:", imageSrc);
+            e.currentTarget.src = "/fallback.png";
+          }}
         />
+      </div>
+      {/* Seller info with fallbacks */}
+      <div className="flex items-center mb-2 opacity-80 text-xs w-full">
+        <Image
+          src={product.seller_image || "/fallback.png"}
+          alt={product.seller_display_name || product.fid || "Anonymous Seller"}
+          width={24}
+          height={24}
+          className="rounded-full mr-2"
+        />
+        <span className="truncate text-gray-700 text-xs">
+          {product.seller_display_name || product.fid || "Anonymous Seller"}
+        </span>
       </div>
       <div className="w-full">
         <div className="flex justify-between items-center mb-1">

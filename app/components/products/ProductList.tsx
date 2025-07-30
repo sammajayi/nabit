@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import { ProductCard } from "./ProductCard";
 // import ProductDetails from "./ProductDetails";
 import { useRouter } from "next/navigation";
-import { mockProducts } from "../../components/products/mockProducts";
 import Navbar from "../Navbar";
 // import { useAccount } from "wagmi";
 
@@ -32,30 +31,25 @@ type ProductListProps = {
 export default function ProductList({ onAddToCart }: ProductListProps) {
   const [activeTab, setActiveTab] = useState("Home");
   const [loading, setLoading] = useState(true);
-  const [products, setProducts] = useState<typeof mockProducts>([]);
+  const [products, setProducts] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   // const { address, isConnected } = useAccount();
   const router = useRouter();
 
-  // useEffect(() => {
-  //   async function fetchProducts() {
-  //     setLoading(true);
-  //     try {
-  //       const res = await fetch("/api/products"); // or your backend endpoint
-  //       const data = await res.json();
-  //       setProducts(data);
-  //     } catch (err) {
-  //       setProducts([]);
-  //     } finally {
-  //       setLoading(false);
-  //     }
-  //   }
-  //   fetchProducts();
-  // }, []);
-
   useEffect(() => {
-    setProducts(mockProducts);
-    setLoading(false);
+    async function fetchProducts() {
+      setLoading(true);
+      try {
+        const res = await fetch("/api/products");
+        const data = await res.json();
+        setProducts(data);
+      } catch (err) {
+        setProducts([]);
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchProducts();
   }, []);
 
   // Filter products by active category and search term
