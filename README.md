@@ -12,4 +12,4 @@ NabIt is an onchain e-commerce mini-app for the Farcaster ecosystem. Users can b
 - **Product Upload**: Upload images and documents for new products.
 - **API Integration**: Posts new products to an external API.(Having a backend issue, will resolve this soon)
 - **Manifest & Verification**: Ready for Farcaster Mini App publishing and developer rewards.
-
+- **BasePay**: integrated for swift payment
