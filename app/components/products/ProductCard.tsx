@@ -1,8 +1,8 @@
 "use client";
 import Image from "next/image";
-// import { useRouter } from "next/navigation";
-// import { useState } from "react";
-import { Checkout, CheckoutButton, CheckoutStatus } from '@coinbase/onchainkit/checkout';
+import { BasePayButton } from '@base-org/account-ui/react';
+import { pay, getPaymentStatus } from '@base-org/account';
+import { useState } from 'react';
 
 type Product = {
   name: string;
@@ -18,12 +18,109 @@ type Product = {
 
 type ProductCardProps = {
   product: Product;
-  onAddToCart?: (product: Product) => void;
+  // onAddToCart?: (product: Product) => void;
+  onPaymentComplete?: (product: Product, paymentId: string) => void;
+  recipientAddress?: string;
+  testnet?: boolean;
+  collectUserInfo?: boolean;
 };
 
-export function ProductCard({ product, /*onAddToCart*/ }: ProductCardProps) {
-  // const router = useRouter();
-  // const [isAdded, setIsAdded] = useState(false);
+export function ProductCard({
+  product,
+  // onAddToCart, 
+  onPaymentComplete,
+  recipientAddress = process.env.NEXT_PUBLIC_RECIPIENT_ADDRESS || '0xb3856fAae31C364F1C62A42ccb3E8002B951C027',
+  testnet = false,
+}: ProductCardProps) {
+  const [paymentStatus, setPaymentStatus] = useState('');
+  const [paymentId, setPaymentId] = useState('');
+
+  const handlePayment = async () => {
+    try {
+      setPaymentStatus('Payment initiated...');
+      
+      const result = await pay({
+        amount: product.price.toString(), 
+        to: recipientAddress, 
+        testnet: testnet 
+      });
+
+      const { id } = result as { id: string };
+
+      setPaymentId(id);
+      setPaymentStatus('Payment initiated! Click "Check Status" to see the result.');
+      
+      // Auto-check status after payment initiation
+      setTimeout(() => handleCheckStatus(), 2000);
+      
+    } catch (error) {
+      console.error('Payment failed:', error);
+      setPaymentStatus('Payment failed');
+    }
+  };
+
+  const handleCheckStatus = async () => {
+    if (!paymentId) {
+      return;
+    }
+
+    try {
+      const { status } = await getPaymentStatus({ id: paymentId });
+      setPaymentStatus(`Payment status: ${status}`);
+      
+      if (status === 'completed') {
+        setPaymentStatus('completed');
+        if (onPaymentComplete) {
+          onPaymentComplete(product, paymentId);
+        }
+      } else if (status === 'pending') {
+        // Continue checking if still processing
+        setTimeout(() => handleCheckStatus(), 3000);
+      } else if (status === 'failed' || status === 'not_found') {
+        setPaymentStatus('Payment failed');
+      }
+    } catch (error) {
+      console.error('Status check failed:', error);
+      setPaymentStatus('Status check failed');
+    }
+  };
+
+  const getButtonContent = () => {
+    if (paymentStatus.includes('completed')) {
+      return (
+        <div className="w-full bg-green-500 text-white py-3 rounded-lg font-bold text-center">
+          Successful!
+        </div>
+      );
+    }
+    
+    if (paymentStatus.includes('initiated')) {
+      return (
+        <div className="w-full bg-blue-500 text-white py-3 rounded-lg font-bold text-center flex items-center justify-center gap-2">
+          <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+          Processing...
+        </div>
+      );
+    }
+    
+    if (paymentStatus.includes('failed')) {
+      return (
+        <button
+          onClick={handlePayment}
+          className="w-full bg-red-500 hover:bg-red-600 text-white py-3 rounded-lg font-bold text-center transition-colors"
+        >
+          Payment Failed - Retry
+        </button>
+      );
+    }
+
+    return (
+      <BasePayButton
+        colorScheme="light"
+        onClick={handlePayment}
+      />
+    );
+  };
 
   const imageSrc =
     typeof product.images[0] === "string" && product.images[0].trim() !== ""
@@ -39,6 +136,7 @@ export function ProductCard({ product, /*onAddToCart*/ }: ProductCardProps) {
           width={320}
           height={320}
           className="object-cover w-full h-full"
+          priority
           onError={(e) => {
             console.log("Image failed to load:", imageSrc);
             e.currentTarget.src = "/fallback.png";
@@ -63,23 +161,14 @@ export function ProductCard({ product, /*onAddToCart*/ }: ProductCardProps) {
           <span className="font-extrabold text-lg text-black truncate">{product.name}</span>
           <span className="text-blue-600 font-bold text-lg">${product.price}</span>
         </div>
-        {/* <div className="text-gray-500 text-xs mb-2 font-semibold">{product.category}</div> */}
-        <div className="text-gray-700 text-sm mb-4 line-clamp-2">{product.description}</div>
-        {/* <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onAddToCart?.(product);
-            setIsAdded(true);
-          }}
-          className="w-full bg-blue-600 text-white py-3 rounded-lg font-bold hover:bg-blue-700 transition text-base"
-        >
-          {isAdded ? "Added to Cart" : "Add to Cart"}
-        </button> */}
 
-        <Checkout productId='59c07652-724b-4eed-aa8d-2520b1907ed2' >
-          <CheckoutButton text="Nab Now" coinbaseBranded />
-          <CheckoutStatus />
-        </Checkout>
+        <div className="text-gray-700 text-sm mb-4 line-clamp-2">
+          {product.description}
+        </div>
+
+        <div className="w-full">
+          {getButtonContent()}
+        </div>
       </div>
     </div>
   );

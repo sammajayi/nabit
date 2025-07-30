@@ -3,7 +3,7 @@ import Image from 'next/image';
 import type { NeynarUser } from '@/lib/neynar';
 import { useFarcasterFid } from "../../hooks/useFarcasterFid";
 export default function Profile() {
- 
+
   const [user, setUser] = useState<Partial<NeynarUser> | null>(null);
   const [, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -17,9 +17,9 @@ export default function Profile() {
 
 
   const stats = {
-    listings: 12,
-    sold: 8,
-    total: 2.5, // ETH or your currency
+    listings: 0,
+    sold: 0,
+    total: 0, 
   };
 
   useEffect(() => {
@@ -28,16 +28,16 @@ export default function Profile() {
       setError(null);
       return;
     }
-    
+
     setLoading(true);
     setError(null);
-    
+
     fetch(`/api/farcaster/user?fid=${fid}`)
       .then((res) => {
         if (res.ok) {
           return res.json();
         } else if (res.status === 404) {
-          // User not found
+
           return null;
         } else {
           return Promise.reject("Failed to fetch user");
@@ -58,11 +58,16 @@ export default function Profile() {
       .finally(() => setProductsLoading(false));
   }, [fid]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return (
+    <div className="flex flex-col items-center p-6 rounded-2xl  bg-white mt-6 max-w-xs mx-auto">
+      <div className="w-16 h-16 border-4 border-gray-200 border-t-blue-600 rounded-full animate-spin"></div>
+      {/* <p className="mt-4 text-gray-500 text-sm">Loading profile...</p> */}
+    </div>
+  );
   if (!user) return null
 
   return (
-    <div className="flex flex-col items-center p-6 rounded-2xl shadow-md bg-white mt-6 max-w-xs mx-auto">
+    <div className="flex flex-col items-center p-6 rounded-2xl shadow-md  bg-white mt-6 max-w-xs mx-auto">
 
       <div className="w-24 h-24 rounded-full overflow-hidden border-4 border-gray-200 shadow mb-3">
         <Image
@@ -112,6 +117,11 @@ export default function Profile() {
            ))}
          </ul>
        )}
+     </div>
+
+     {/* Order History */}
+     <div className="w-full mt-6">
+       <h3 className='text-black font-semibold'>Order History</h3>
      </div>
     </div>
   );

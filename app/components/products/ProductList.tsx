@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
-// import Image from "next/image";
+
 import { ProductCard } from "./ProductCard";
-// import ProductDetails from "./ProductDetails";
+
 import { useRouter } from "next/navigation";
 import Navbar from "../Navbar";
-// import { useAccount } from "wagmi";
+
 
 
 const categories = [
@@ -28,7 +28,7 @@ type ProductListProps = {
   onAddToCart?: (product: Product) => void;
 };
 
-export default function ProductList({ onAddToCart }: ProductListProps) {
+export default function ProductList({  }: ProductListProps) {
   const [activeTab, setActiveTab] = useState("Home");
   const [loading, setLoading] = useState(true);
   const [products, setProducts] = useState<any[]>([]);
@@ -74,7 +74,7 @@ export default function ProductList({ onAddToCart }: ProductListProps) {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="bg-[#e9eef4] rounded-xl px-4 py-3 w-full placeholder:text-gray-300 text-black text-lg outline-none"
+            className="bg-[#e9eef4] rounded-xl px-4 py-2 w-full placeholder:text-gray-300 text-black text-xs outline-none"
             placeholder="Search products"
           />
         </div>
@@ -113,7 +113,7 @@ export default function ProductList({ onAddToCart }: ProductListProps) {
                 >
                   <ProductCard
                     product={product}
-                    onAddToCart={onAddToCart}
+                    // onAddToCart={onAddToCart}
                   />
                 </div>
               ))}

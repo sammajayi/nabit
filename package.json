@@ -9,6 +9,8 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@base-org/account": "^1.1.1",
+    "@base-org/account-ui": "^1.0.1",
     "@coinbase/onchainkit": "latest",
     "@farcaster/frame-sdk": "^0.0.60",
     "@farcaster/miniapp-sdk": "^0.1.2",
@@ -20,6 +22,7 @@
     "next": "^15.4.4",
     "react": "^18",
     "react-dom": "^18",
+    "sonner": "^2.0.6",
     "viem": "^2.27.2",
     "wagmi": "^2.14.11",
     "zod": "^3.25.76"
