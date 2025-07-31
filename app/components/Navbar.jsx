@@ -49,14 +49,15 @@ export default function Navbar() {
   if (error) return <div className="text-red-500">Error: {error}</div>;
 
   return (
-    <header className="flex items-center justify-between " >
+    <header className="fixed top-0 left-1/2 transform -translate-x-1/2 z-50 bg-white shadow-sm border-b-2 border-gray-200 flex items-center justify-between px-4 py-2 w-full max-w-md" >
       <div className="">
         <div className="">
           <Image 
           src="/nabitlogo.png"
           alt="nabitlogo"
-          width={200}
-          height={200}
+          width={120}
+          height={100}
+          className="object-contain"
           />
         </div>
       </div>

@@ -1,0 +1,35 @@
+[
+  {
+    "id": "1736522400000",
+    "productId": "1736522400000",
+    "productName": "Premium Wireless Headphones",
+    "rating": 5,
+    "comment": "These headphones are absolutely amazing! The sound quality is crystal clear and the noise cancellation works perfectly. Highly recommended!",
+    "userFid": "123456",
+    "userName": "Alex Chen",
+    "userProfileImage": "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face",
+    "createdAt": "2025-01-10T15:30:00.000Z"
+  },
+  {
+    "id": "1736436000000",
+    "productId": "1736522400000",
+    "productName": "Premium Wireless Headphones",
+    "rating": 4,
+    "comment": "Great headphones overall. The battery life is excellent and they're very comfortable to wear for long periods. Only minor complaint is they're a bit heavy.",
+    "userFid": "789012",
+    "userName": "Sarah Johnson",
+    "userProfileImage": "https://images.unsplash.com/photo-1494790108755-2616b612b3fd?w=150&h=150&fit=crop&crop=face",
+    "createdAt": "2025-01-09T10:15:00.000Z"
+  },
+  {
+    "id": "1753916042877",
+    "productId": "1753914487201",
+    "productName": "Macbook 2019",
+    "rating": 5,
+    "comment": "This  is a very good buy, you'll get the value for your money",
+    "userFid": "875984",
+    "userName": "Sam",
+    "userProfileImage": "https://imagedelivery.net/BXluQx4ige9GuW0Ia56BHw/d6629f66-14bd-4e8e-fc51-f4d6d41bff00/rectcrop3",
+    "createdAt": "2025-07-30T22:54:02.877Z"
+  }
+]
