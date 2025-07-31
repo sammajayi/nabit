@@ -45,7 +45,7 @@ export default function Navbar() {
       .finally(() => setLoading(false));
   }, [fid]);
 
-  if (loading) return <div>Loading...</div>;
+  if (loading) return 
   if (error) return <div className="text-red-500">Error: {error}</div>;
 
   return (

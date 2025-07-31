@@ -98,7 +98,7 @@ export default function ProductList({ }: ProductListProps) {
         {/* Products Section */}
         <div className="px-4 mt-4">
           {loading ? (
-            <div className="text-black">Loading...</div>
+          null
           ) : filteredProducts.length === 0 ? (
             <div className="text-gray-400">
               {searchTerm ? `No products found for "${searchTerm}"` : "No products in this category."}
