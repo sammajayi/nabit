@@ -42,7 +42,8 @@ export default function ProductList({ }: ProductListProps) {
       try {
         const res = await fetch("/api/products");
         const data = await res.json();
-        setProducts(data);
+        // Ensure data is an array
+        setProducts(Array.isArray(data) ? data : []);
       } catch  {
         setProducts([]);
       } finally {
@@ -52,8 +53,8 @@ export default function ProductList({ }: ProductListProps) {
     fetchProducts();
   }, []);
 
-  // Filter products by active category and search term
-  const filteredProducts = products.filter((product) => {
+  // Filter products by active category and search term - ensure products is always an array
+  const filteredProducts = (products || []).filter((product) => {
     const matchesCategory = activeTab === "Home" || product.category === activeTab;
     const matchesSearch = searchTerm === "" ||
       product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -64,17 +65,17 @@ export default function ProductList({ }: ProductListProps) {
   });
 
   return (
-    <div className="w-full max-w-md mx-auto bg-[#f7f9fb] min-h-screen">
+    <div className="w-full max-w-md mx-auto px-4 py-3 bg-[#f7f9fb] min-h-screen">
       <Navbar />
-      <div className="pt-20 px-4 pb-20">{/* Add top padding for fixed navbar and bottom padding for BottomNav */}
+      <div>
 
 
-        <div className="px-4 my-2">
+        <div className="px-4 mb-2">
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="bg-[#e9eef4] rounded-xl px-4 py-3 w-full placeholder:text-gray-500 text-black text-xs outline-none"
+            className="bg-[#e9eef4] rounded-xl px-4 py-2 w-full placeholder:text-gray-300 text-black text-xs outline-none"
             placeholder="Search products"
           />
         </div>
@@ -98,7 +99,7 @@ export default function ProductList({ }: ProductListProps) {
         {/* Products Section */}
         <div className="px-4 mt-4">
           {loading ? (
-          null
+            <div className="text-black">Loading...</div>
           ) : filteredProducts.length === 0 ? (
             <div className="text-gray-400">
               {searchTerm ? `No products found for "${searchTerm}"` : "No products in this category."}
@@ -113,11 +114,6 @@ export default function ProductList({ }: ProductListProps) {
                 >
                   <ProductCard
                     product={product}
-                    onPaymentComplete={(product, paymentId) => {
-                      console.log('Payment completed for:', product.name, 'Payment ID:', paymentId);
-                      // Navigate to success page or show success message
-                      router.push(`/success?product=${encodeURIComponent(product.name)}&paymentId=${paymentId}`);
-                    }}
                   // onAddToCart={onAddToCart}
                   />
                 </div>

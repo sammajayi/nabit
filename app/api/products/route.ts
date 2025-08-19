@@ -5,7 +5,7 @@ import path from "path";
 
 const UPLOADS_DIR = path.join(process.cwd(), "public/uploads");
 
-async function saveFile(file: any) {
+async function saveFile(file: File) {
   const arrayBuffer = await file.arrayBuffer();
   const buffer = Buffer.from(arrayBuffer);
   const filename = `${Date.now()}-${file.name}`;
@@ -41,16 +41,24 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   try {
     const contentType = req.headers.get("content-type") || "";
-    let data: any = {};
+    let data: {
+      name?: string;
+      description?: string;
+      price?: string | number;
+      category?: string;
+      images?: string[];
+      seller_image?: string;
+      seller_display_name?: string;
+    } = {};
     let images: string[] = [];
     let document: string | null = null;
 
     if (contentType.includes("multipart/form-data")) {
       const formData = await req.formData();
-      data.name = formData.get("name");
-      data.description = formData.get("description");
-      data.price = formData.get("price");
-      data.category = formData.get("category");
+      data.name = formData.get("name")?.toString();
+      data.description = formData.get("description")?.toString();
+      data.price = formData.get("price")?.toString();
+      data.category = formData.get("category")?.toString();
       
       // Validate required fields
       if (!data.name || !data.description || !data.price || !data.category) {
@@ -84,8 +92,8 @@ export async function POST(req: NextRequest) {
       }
       
       // Seller info
-      data.seller_image = formData.get("seller_image") || null;
-      data.seller_display_name = formData.get("seller_display_name") || null;
+      data.seller_image = formData.get("seller_image")?.toString() || undefined;
+      data.seller_display_name = formData.get("seller_display_name")?.toString() || undefined;
     } else {
       data = await req.json();
       
@@ -97,7 +105,7 @@ export async function POST(req: NextRequest) {
       }
       
       // Convert price to number
-      const price = parseFloat(data.price);
+      const price = parseFloat(String(data.price));
       if (isNaN(price) || price <= 0) {
         return NextResponse.json({ 
           error: 'Invalid price value' 

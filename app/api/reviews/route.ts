@@ -1,113 +1,112 @@
 import { NextRequest, NextResponse } from "next/server";
-import { promises as fs } from "fs";
-import path from "path";
+import { supabase } from "@/lib/supabase";
 
-const REVIEWS_FILE = path.join(process.cwd(), "app/api/reviews/reviews.json");
-
-// Define review types
-interface Review {
-  id: string;
-  productId: string;
-  productName: string;
-  rating: number;
-  comment: string;
-  userFid?: string | null;
-  userName: string;
-  userProfileImage?: string | null;
-  createdAt: string;
-}
-
-interface ReviewInput {
-  productId: string;
-  productName: string;
-  rating: number;
-  comment: string;
-  userFid?: string | null;
-  userName: string;
-  userProfileImage?: string | null;
-}
-
-async function readReviews(): Promise<Review[]> {
+export async function GET(req: NextRequest) {
   try {
-    const data = await fs.readFile(REVIEWS_FILE, "utf-8");
-    return JSON.parse(data) as Review[];
-  } catch {
-    return [];
-  }
-}
-
-async function writeReviews(reviews: Review[]): Promise<void> {
-  // Ensure directory exists
-  const dir = path.dirname(REVIEWS_FILE);
-  try {
-    await fs.access(dir);
-  } catch {
-    await fs.mkdir(dir, { recursive: true });
-  }
-  
-  await fs.writeFile(REVIEWS_FILE, JSON.stringify(reviews, null, 2), "utf-8");
-}
-
-export async function GET(req: NextRequest): Promise<NextResponse> {
-  const { searchParams } = new URL(req.url);
-  const productId = searchParams.get("productId");
-  const productName = searchParams.get("productName");
-  
-  const reviews: Review[] = await readReviews();
-  
-  if (productId) {
-    return NextResponse.json(reviews.filter((review) => review.productId === productId));
-  }
-  
-  if (productName) {
-    return NextResponse.json(reviews.filter((review) => review.productName === productName));
-  }
-  
-  return NextResponse.json(reviews);
-}
-
-export async function POST(req: NextRequest): Promise<NextResponse> {
-  try {
-    const reviewData: ReviewInput = await req.json();
+    const productId = req.nextUrl.searchParams.get("productId");
     
-    // Validate required fields
-    if (!reviewData.productId || !reviewData.productName || !reviewData.rating || !reviewData.comment || !reviewData.userName) {
-      return NextResponse.json(
-        { error: "Missing required fields: productId, productName, rating, comment, userName" },
-        { status: 400 }
-      );
+    if (!productId) {
+      return NextResponse.json({ error: 'Product ID required' }, { status: 400 });
     }
     
-    // Validate rating range
-    if (reviewData.rating < 1 || reviewData.rating > 5) {
-      return NextResponse.json(
-        { error: "Rating must be between 1 and 5" },
-        { status: 400 }
-      );
+    const { data: reviews, error } = await supabase
+      .from('reviews')
+      .select(`
+        *,
+        users!reviews_reviewer_fid_fkey (
+          display_name,
+          pfp_url
+        )
+      `)
+      .eq('product_id', productId)
+      .order('created_at', { ascending: false });
+    
+    if (error) {
+      console.error('Error fetching reviews:', error);
+      return NextResponse.json({ error: 'Failed to fetch reviews' }, { status: 500 });
     }
     
-    const newReview: Review = {
-      id: Date.now().toString(),
-      productId: reviewData.productId,
-      productName: reviewData.productName,
-      rating: reviewData.rating,
-      comment: reviewData.comment.trim(),
-      userFid: reviewData.userFid || null,
-      userName: reviewData.userName,
-      userProfileImage: reviewData.userProfileImage || null,
-      createdAt: new Date().toISOString(),
-    };
-    
-    const reviews: Review[] = await readReviews();
-    reviews.push(newReview);
-    await writeReviews(reviews);
-    
-    return NextResponse.json(newReview, { status: 201 });
+    return NextResponse.json(reviews || []);
   } catch (error) {
-    console.error("Error creating review:", error);
-    return NextResponse.json(
-      { error: "Failed to create review" },
-      { status: 500 }
-    );
+    console.error('Error in GET /api/reviews:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+
+export async function POST(req: NextRequest) {
+  try {
+    const { productId, rating, comment } = await req.json();
+    
+    if (!productId || !rating) {
+      return NextResponse.json({ 
+        error: 'Product ID and rating are required' 
+      }, { status: 400 });
+    }
+    
+    if (rating < 1 || rating > 5) {
+      return NextResponse.json({ 
+        error: 'Rating must be between 1 and 5' 
+      }, { status: 400 });
+    }
+    
+    const fid = req.headers.get("x-user-fid");
+    if (!fid) {
+      return NextResponse.json({ error: 'User FID required' }, { status: 400 });
+    }
+    
+    // Check if user already reviewed this product
+    const { data: existingReview } = await supabase
+      .from('reviews')
+      .select('id')
+      .eq('product_id', productId)
+      .eq('reviewer_fid', fid)
+      .single();
+    
+    if (existingReview) {
+      return NextResponse.json({ 
+        error: 'You have already reviewed this product' 
+      }, { status: 400 });
+    }
+    
+    // Ensure user exists
+    const { error: userError } = await supabase
+      .from('users')
+      .upsert({ 
+        fid,
+        created_at: new Date().toISOString()
+      });
+
+    if (userError) {
+      console.error('Error upserting user:', userError);
+      return NextResponse.json({ error: 'Failed to create user' }, { status: 500 });
+    }
+    
+    // Create review
+    const { data: review, error } = await supabase
+      .from('reviews')
+      .insert({
+        product_id: productId,
+        reviewer_fid: fid,
+        rating,
+        comment: comment || null
+      })
+      .select(`
+        *,
+        users!reviews_reviewer_fid_fkey (
+          display_name,
+          pfp_url
+        )
+      `)
+      .single();
+    
+    if (error) {
+      console.error('Error creating review:', error);
+      return NextResponse.json({ error: 'Failed to create review' }, { status: 500 });
+    }
+    
+    return NextResponse.json(review, { status: 201 });
+  } catch (error) {
+    console.error('Error in POST /api/reviews:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

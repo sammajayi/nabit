@@ -1,7 +1,6 @@
 import Image from "next/image";
 import React, { useState, useRef, useEffect } from "react";
 import { useFarcasterFid } from "../../hooks/useFarcasterFid";
-import Navbar from "../Navbar";
 
 export default function ProductUpload() {
   const [formData, setFormData] = useState({
@@ -170,13 +169,10 @@ export default function ProductUpload() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Navbar />
-      
-      <div className="w-full max-w-md mx-auto px-4 py-3 bg-white min-h-screen pt-24">
-        <h1 className="text-2xl font-bold my-6 text-center text-black">
-          What is up for grab?
-        </h1>
+    <div className="w-full max-w-md mx-auto px-4 py-3 bg-white min-h-screen">
+      <h1 className="text-2xl font-bold my-6 text-center text-black">
+        What is up for grab?
+      </h1>
 
       {/* Status Messages */}
       {uploadStatus.message && (
@@ -363,7 +359,6 @@ export default function ProductUpload() {
           {isLoading ? "Uploading..." : "Upload Product"}
         </button>
       </form>
-      </div>
     </div>
   );
 }

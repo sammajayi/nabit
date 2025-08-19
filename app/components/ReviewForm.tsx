@@ -1,7 +1,7 @@
 "use client";
 import { useState } from 'react';
 import Image from 'next/image';
-import { useFarcasterUser } from '../hooks/useFarcasterUser';
+import  {useFarcasterUser} from '../hooks/useFarcasterUser';
 
 interface ReviewFormProps {
   productId: string;

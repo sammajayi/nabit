@@ -418,7 +418,7 @@ export default function ProductDetailsPage() {
               <div className="flex gap-2">
                 <button 
                   onClick={() => setShowReviewForm(true)}
-                  className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-sm font-medium transition flex items-center gap-1"
+                  className="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1 rounded-lg text-xs font-medium transition flex items-center gap-1"
                 >
                   <MessageCircle size={16} />
                   Write Review
