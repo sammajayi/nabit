@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Silence warnings
-  // https://github.com/WalletConnect/walletconnect-monorepo/issues/1908
+
 
   turbopack: {
     rules: {
@@ -32,7 +31,7 @@ const nextConfig = {
       {
         source: "/.well-known/farcaster.json",
         destination:
-          "https://api.farcaster.xyz/miniapps/hosted-manifest/0197e10f-3285-efeb-4f24-2bf73f1d6adf",
+          "https://api.farcaster.xyz/miniapps/hosted-manifest/01990ab2-25cc-0ac7-43b5-56092d2073f8",
         permanent: false,
       },
     ];
