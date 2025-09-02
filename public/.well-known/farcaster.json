@@ -1,11 +1,11 @@
 {
- "frame": {
+  "frame": {
     "name": "Nabit",
     "version": "1",
     "iconUrl": "https://nabit.vercel.app/icon.png",
     "homeUrl": "https://nabit.vercel.app",
     "imageUrl": "https://nabit.vercel.app/image.png",
-    "buttonTitle": "Start Shopping",
+    "buttonTitle": "Shop now",
     "splashImageUrl": "https://nabit.vercel.app/splash.png",
     "splashBackgroundColor": "#000000",
     "webhookUrl": "https://nabit.vercel.app/api/webhook",
@@ -17,10 +17,9 @@
     "primaryCategory": "shopping",
     "tags": [
       "shopping",
-      "ecommerce",
-      "markeplace",
-      "products",
-      "onlinestore"
+      "marketplace",
+      "onlinestore",
+      "ecommerce"
     ],
     "heroImageUrl": "https://nabit.vercel.app/hero.png",
     "ogTitle": "Nabit - Buy and Sell Onchain",
