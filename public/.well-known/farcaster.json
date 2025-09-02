@@ -5,26 +5,26 @@
     "iconUrl": "https://nabit.vercel.app/icon.png",
     "homeUrl": "https://nabit.vercel.app",
     "imageUrl": "https://nabit.vercel.app/image.png",
-    "buttonTitle": "Shop Now",
-    "splashImageUrl": "https://nabit.vercel.app/",
+    "buttonTitle": "Start Shopping",
+    "splashImageUrl": "https://nabit.vercel.app/splash.png",
     "splashBackgroundColor": "#000000",
     "webhookUrl": "https://nabit.vercel.app/api/webhook",
-    "subtitle": "Nab It, No Waiting",
+    "subtitle": "Nab it, No Waiting",
     "description": "Buy and sell Onchain. Connect your wallet to start shopping",
     "screenshotUrls": [
       "https://nabit.vercel.app/screenshot.png"
     ],
     "primaryCategory": "shopping",
     "tags": [
-      "e-commerce",
-      "marketplace",
       "shopping",
+      "ecommerce",
+      "markeplace",
       "products",
       "onlinestore"
     ],
     "heroImageUrl": "https://nabit.vercel.app/hero.png",
-    "tagline": "Nab It, No Waiting",
     "ogTitle": "Nabit - Buy and Sell Onchain",
+    "ogDescription": "Nab it, No Waiting",
     "ogImageUrl": "https://nabit.vercel.app/og-image.png"
   },
   "accountAssociation": {
@@ -32,7 +32,7 @@
     "payload": "eyJkb21haW4iOiJuYWJpdC52ZXJjZWwuYXBwIn0",
     "signature": "PF7C1UIhs/Qfj4K5rtcsJNCZkTlkaq/K3oFgpJ867ccxaC/EK1BwEJRFr9T6KkcP+EjhYD8u3PC4xf0ceptxxxs="
   },
-     "baseBuilder": {
+   "baseBuilder": {
     "allowedAddresses": ["0xa45AeDAA30331C5391A60dD837558212cfCF1eEc"]
   }
 }
