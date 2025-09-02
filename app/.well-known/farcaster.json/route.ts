@@ -12,46 +12,38 @@ function withValidProperties(
 }
 
 export async function GET() {
-  const URL = process.env.NEXT_PUBLIC_URL;
-
   return Response.json({
-    accountAssociation: {
-      // header: process.env.NEXT_PUBLIC_FARCASTER_HEADER,
-      // payload: process.env.NEXT_PUBLIC_FARCASTER_PAYLOAD,
-      // signature: process.env.NEXT_PUBLIC_FARCASTER_SIGNATURE,
-      "header": "eyJmaWQiOjg3NTk4NCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweGIzODU2ZkFhZTMxQzM2NEYxQzYyQTQyY2NiM0U4MDAyQjk1MUMwMjcifQ",
-      "payload": "eyJkb21haW4iOiJuYWJpdC52ZXJjZWwuYXBwIn0",
-      "signature": "PF7C1UIhs/Qfj4K5rtcsJNCZkTlkaq/K3oFgpJ867ccxaC/EK1BwEJRFr9T6KkcP+EjhYD8u3PC4xf0ceptxxxs="
-    },
-    frame: withValidProperties({
+    frame: {
+      name: "Nabit",
       version: "1",
-      name: process.env.NEXT_PUBLIC_ONCHAINKIT_PROJECT_NAME,
-      subtitle: process.env.NEXT_PUBLIC_APP_SUBTITLE,
-      description: process.env.NEXT_PUBLIC_APP_DESCRIPTION,
-      screenshotUrls: [],
-      iconUrl: process.env.NEXT_PUBLIC_APP_ICON,
-      splashImageUrl: process.env.NEXT_PUBLIC_APP_SPLASH_IMAGE,
-      splashBackgroundColor: process.env.NEXT_PUBLIC_SPLASH_BACKGROUND_COLOR,
-      homeUrl: URL,
-      webhookUrl: `${URL}/api/webhook`,
-      primaryCategory: "social",
-      "tags": [
-        "e-commerce",
-        "marketplace",
-        "buy and sell",
-        "onchain market",
-        "shopping",
-        "products",
-        "onlinestore",
+      iconUrl: "https://nabit.vercel.app/icon.png",
+      homeUrl: "https://nabit.vercel.app",
+      imageUrl: "https://nabit.vercel.app/image.png",
+      buttonTitle: "Shop now",
+      splashImageUrl: "https://nabit.vercel.app/splash.png",
+      splashBackgroundColor: "#000000",
+      webhookUrl: "https://nabit.vercel.app/api/webhook",
+      subtitle: "Nab it, No Waiting",
+      description: "Buy and sell Onchain. Connect your wallet to start shopping",
+      screenshotUrls: [
+        "https://nabit.vercel.app/screenshot.png"
       ],
-      heroImageUrl: process.env.NEXT_PUBLIC_APP_HERO_IMAGE,
-      tagline: process.env.NEXT_PUBLIC_APP_TAGLINE,
-      ogTitle: process.env.NEXT_PUBLIC_APP_OG_TITLE,
-      ogDescription: process.env.NEXT_PUBLIC_APP_OG_DESCRIPTION,
-      ogImageUrl: process.env.NEXT_PUBLIC_APP_OG_IMAGE,
-    }),
-    baseBuilder: {
-      allowedAddresses: ["0xa45AeDAA30331C5391A60dD837558212cfCF1eEc"]
+      primaryCategory: "shopping",
+      tags: [
+        "shopping",
+        "marketplace",
+        "onlinestore",
+        "ecommerce"
+      ],
+      heroImageUrl: "https://nabit.vercel.app/hero.png",
+      ogTitle: "Nabit - Buy and Sell Onchain",
+      ogDescription: "Nab it, No Waiting",
+      ogImageUrl: "https://nabit.vercel.app/og-image.png"
+    },
+    accountAssociation: {
+      header: "eyJmaWQiOjg3NTk4NCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweGIzODU2ZkFhZTMxQzM2NEYxQzYyQTQyY2NiM0U4MDAyQjk1MUMwMjcifQ",
+      payload: "eyJkb21haW4iOiJuYWJpdC52ZXJjZWwuYXBwIn0",
+      signature: "PF7C1UIhs/Qfj4K5rtcsJNCZkTlkaq/K3oFgpJ867ccxaC/EK1BwEJRFr9T6KkcP+EjhYD8u3PC4xf0ceptxxxs="
     }
   });
 }
