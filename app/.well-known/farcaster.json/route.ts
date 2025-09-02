@@ -12,38 +12,9 @@ function withValidProperties(
 }
 
 export async function GET() {
-  return Response.json({
-    frame: {
-      name: "Nabit",
-      version: "1",
-      iconUrl: "https://nabit.vercel.app/icon.png",
-      homeUrl: "https://nabit.vercel.app",
-      imageUrl: "https://nabit.vercel.app/image.png",
-      buttonTitle: "Shop now",
-      splashImageUrl: "https://nabit.vercel.app/splash.png",
-      splashBackgroundColor: "#000000",
-      webhookUrl: "https://nabit.vercel.app/api/webhook",
-      subtitle: "Nab it, No Waiting",
-      description: "Buy and sell Onchain. Connect your wallet to start shopping",
-      screenshotUrls: [
-        "https://nabit.vercel.app/screenshot.png"
-      ],
-      primaryCategory: "shopping",
-      tags: [
-        "shopping",
-        "marketplace",
-        "onlinestore",
-        "ecommerce"
-      ],
-      heroImageUrl: "https://nabit.vercel.app/hero.png",
-      ogTitle: "Nabit - Buy and Sell Onchain",
-      ogDescription: "Nab it, No Waiting",
-      ogImageUrl: "https://nabit.vercel.app/og-image.png"
-    },
-    accountAssociation: {
-      header: "eyJmaWQiOjg3NTk4NCwidHlwZSI6ImF1dGgiLCJrZXkiOiIweGIzODU2ZkFhZTMxQzM2NEYxQzYyQTQyY2NiM0U4MDAyQjk1MUMwMjcifQ",
-      payload: "eyJkb21haW4iOiJuYWJpdC52ZXJjZWwuYXBwIn0",
-      signature: "PF7C1UIhs/Qfj4K5rtcsJNCZkTlkaq/K3oFgpJ867ccxaC/EK1BwEJRFr9T6KkcP+EjhYD8u3PC4xf0ceptxxxs="
-    }
-  });
+  
+  return Response.redirect(
+    "https://api.farcaster.xyz/miniapps/hosted-manifest/01990ab2-25cc-0ac7-43b5-56092d2073f8",
+    307
+  );
 }
